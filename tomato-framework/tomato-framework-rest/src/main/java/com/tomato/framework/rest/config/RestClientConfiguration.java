@@ -19,8 +19,14 @@ public class RestClientConfiguration {
 	@Autowired
 	private HttpMessageConverters httpMessageConverters;
 
+	@Value("${httpclent.connectTimeout}")
+	private Integer connectTimeout;
+
+	@Value("${httpclent.connectionRequestTimeout}")
+	private Integer readTimeout;
+
 	@Bean
-	public RestTemplate getClient(@Value("${httpclent.connectTimeout}") Integer connectTimeout, @Value("${httpclent.connectionRequestTimeout}") Integer readTimeout) {
+	public RestTemplate getClient() {
 
 		SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
 		requestFactory.setConnectTimeout(connectTimeout);

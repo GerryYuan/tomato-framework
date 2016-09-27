@@ -4,6 +4,8 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 
+import org.jfaster.mango.datasource.SimpleDataSourceFactory;
+import org.jfaster.mango.operator.Mango;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -42,4 +44,17 @@ public class DataSourceConfiguration {
 		return config;
 	}
 	
+	@Bean
+	public SimpleDataSourceFactory simpleDataSourceFactory() {
+		SimpleDataSourceFactory dataSourceFactory = new SimpleDataSourceFactory();
+		dataSourceFactory.setDataSource(hikariDataSource());
+		return dataSourceFactory;
+	}
+
+	@Bean
+	public Mango mango() {
+		Mango mango = Mango.newInstance();
+		mango.setDataSourceFactory(simpleDataSourceFactory());
+		return mango;
+	}
 }

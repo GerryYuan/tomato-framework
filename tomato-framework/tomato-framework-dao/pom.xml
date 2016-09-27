@@ -16,6 +16,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<mango.version>1.4.0</mango.version>
 	</properties>
 
 	<dependencies>
@@ -29,7 +30,14 @@
 			<groupId>com.zaxxer</groupId>
 			<artifactId>HikariCP</artifactId>
 		</dependency>
-
+		
+		<!-- orm -->
+		<dependency>
+		    <groupId>org.jfaster</groupId>
+		    <artifactId>mango</artifactId>
+		    <version>${mango.version}</version>
+		</dependency>
+		
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
