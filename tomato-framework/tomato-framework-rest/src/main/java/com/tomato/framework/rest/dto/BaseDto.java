@@ -11,7 +11,7 @@ import lombok.Setter;
  *
  * @author yuanguohua
  * @version  1.0, 2015年9月7日
- * @since   com.yeshj 1.0.0
+ * @since   com.tomato 1.0.0
  */
 @Getter
 @Setter
