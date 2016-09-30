@@ -5,17 +5,19 @@ import java.util.Properties;
 import javax.sql.DataSource;
 
 import org.jfaster.mango.datasource.SimpleDataSourceFactory;
+import org.jfaster.mango.operator.InterceptorChain;
 import org.jfaster.mango.operator.Mango;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.tomato.framework.dao.interceptor.PageInterceptor;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
 public class DataSourceConfiguration {
-	
+
 	@Value("${jdbc.driverClassName}")
 	String driverClass;
 	@Value("${jdbc.url}")
@@ -24,12 +26,12 @@ public class DataSourceConfiguration {
 	String username;
 	@Value("${jdbc.password}")
 	String password;
-	
+
 	@Bean(destroyMethod = "close")
 	public DataSource hikariDataSource() {
 		return new HikariDataSource(hikariConfig());
 	}
-	
+
 	@Bean
 	public HikariConfig hikariConfig() {
 		HikariConfig config = new HikariConfig();
@@ -43,7 +45,7 @@ public class DataSourceConfiguration {
 		config.setDataSourceProperties(dsProperties);
 		return config;
 	}
-	
+
 	@Bean
 	public SimpleDataSourceFactory simpleDataSourceFactory() {
 		SimpleDataSourceFactory dataSourceFactory = new SimpleDataSourceFactory();
@@ -55,6 +57,9 @@ public class DataSourceConfiguration {
 	public Mango mango() {
 		Mango mango = Mango.newInstance();
 		mango.setDataSourceFactory(simpleDataSourceFactory());
+		InterceptorChain interceptorChain = new InterceptorChain();
+		interceptorChain.addInterceptor(new PageInterceptor());
+		mango.setInterceptorChain(interceptorChain);
 		return mango;
 	}
 }
