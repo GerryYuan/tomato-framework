@@ -6,7 +6,7 @@ import org.springframework.context.annotation.ComponentScan;
 import com.tomato.framework.rest.main.Starter;
 
 @SpringBootApplication
-@ComponentScan({ "com.tomato.framework.demo", "com.tomato.framework.rest","com.tomato.framework.dao" })
+@ComponentScan({ "com.tomato.framework.demo" })
 public class StartApp {
 
 	public static void main(String[] args) {
