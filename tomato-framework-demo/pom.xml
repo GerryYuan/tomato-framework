@@ -18,14 +18,22 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<tomato-framework.version>0.0.1-SNAPSHOT</tomato-framework.version>
 	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>com.tomato.framework</groupId>
 			<artifactId>tomato-framework-rest</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${tomato-framework.version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>com.tomato.framework</groupId>
+			<artifactId>tomato-framework-dao</artifactId>
+			<version>${tomato-framework.version}</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
