@@ -17,13 +17,13 @@ import java.util.Properties;
 public class DataSourceConfiguration {
 
 	@Value("${jdbc.driverClassName}")
-	String driverClass;
+	private String driverClass;
 	@Value("${jdbc.url}")
-	String url;
+	private String url;
 	@Value("${jdbc.username}")
-	String username;
+	private String username;
 	@Value("${jdbc.password}")
-	String password;
+	private String password;
 
 	@Bean(destroyMethod = "close")
 	public DataSource hikariDataSource() {
