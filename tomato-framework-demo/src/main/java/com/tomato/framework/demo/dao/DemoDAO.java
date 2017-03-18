@@ -5,12 +5,12 @@ import org.jfaster.mango.annotation.SQL;
 
 import com.tomato.framework.demo.model.DemoMango;
 
-@DB(table = "mango")
+@DB(table = "tomato_framework_test")
 public interface DemoDAO {
 	String COLUMNS = "id, name";
 
 	@SQL("insert into #table(" + COLUMNS + ") values(:id, :name)")
-	void addDemoMango(DemoMango demoMango);
+	boolean addDemoMango(DemoMango demoMango);
 
 	@SQL("select " + COLUMNS + " from #table where id = :1")
 	DemoMango getDemoMango(int id);

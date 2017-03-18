@@ -1,9 +1,8 @@
 package com.tomato.framework.demo.model;
 
+import com.tomato.framework.rest.model.BaseModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
-import com.tomato.framework.rest.model.BaseModel;
 
 @Data
 @EqualsAndHashCode(callSuper = false)

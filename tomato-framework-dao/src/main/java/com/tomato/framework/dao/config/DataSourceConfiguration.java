@@ -4,7 +4,7 @@ import com.tomato.framework.dao.interceptor.PageInterceptor;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.jfaster.mango.datasource.SimpleDataSourceFactory;
-import org.jfaster.mango.operator.InterceptorChain;
+import org.jfaster.mango.interceptor.InterceptorChain;
 import org.jfaster.mango.operator.Mango;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

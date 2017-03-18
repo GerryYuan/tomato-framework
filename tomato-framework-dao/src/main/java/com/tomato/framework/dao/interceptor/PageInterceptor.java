@@ -1,10 +1,10 @@
 package com.tomato.framework.dao.interceptor;
 
 import lombok.extern.slf4j.Slf4j;
-import org.jfaster.mango.operator.Interceptor;
-import org.jfaster.mango.operator.PreparedSql;
-import org.jfaster.mango.reflect.Parameter;
-import org.jfaster.mango.util.SQLType;
+import org.jfaster.mango.binding.BoundSql;
+import org.jfaster.mango.interceptor.Interceptor;
+import org.jfaster.mango.interceptor.Parameter;
+import org.jfaster.mango.util.jdbc.SQLType;
 
 import java.util.List;
 
@@ -17,10 +17,9 @@ import java.util.List;
  */
 @Slf4j
 public class PageInterceptor implements Interceptor {
-
 	@Override
-	public void intercept(PreparedSql preparedSql, List<Parameter> parameters, SQLType sqlType) {
-		log.info(preparedSql.getSql());
+	public void intercept(BoundSql boundSql, List<Parameter> parameters, SQLType sqlType) {
+		log.info(boundSql.getSql());
 	}
 
 }
