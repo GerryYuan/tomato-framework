@@ -5,7 +5,7 @@ import org.jfaster.mango.annotation.SQL;
 
 import com.tomato.framework.demo.model.DemoMango;
 
-@DB(table = "tomato_framework_test")
+@DB(name = "tomato_framework", table = "tomato_framework_test")
 public interface DemoDAO {
 	String COLUMNS = "id, name";
 
