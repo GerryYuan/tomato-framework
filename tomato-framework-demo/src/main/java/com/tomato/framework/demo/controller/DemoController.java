@@ -1,5 +1,6 @@
 package com.tomato.framework.demo.controller;
 
+import com.tomato.framework.core.page.Pagination;
 import com.tomato.framework.demo.model.DemoMango;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +25,14 @@ public class DemoController {
         return ViewModelHelper.OKViewModelResult(demoService.get(id));
     }
 
+    @RequestMapping("/get/page/{status}")
+    public ViewModelResult<?> get(@PathVariable(name = "status") short status) {
+        Pagination pagination = new Pagination();
+        pagination.setLimit(2);
+        return ViewModelHelper.OKViewModelResult(demoService.getMangos(status, pagination));
+    }
+
+
     @RequestMapping("/add/{name}")
     public ViewModelResult<?> add(@PathVariable(name = "name") String name) {
         DemoMango demoMango = new DemoMango();
@@ -40,7 +49,7 @@ public class DemoController {
     public ViewModelResult<?> update(@PathVariable(name = "id") Integer id, @PathVariable(name = "name") String name) {
         DemoMango demoMango = new DemoMango();
         demoMango.setId(id);
-        demoMango.setName(name+new Date().getTime());
+        demoMango.setName(name + new Date().getTime());
         return ViewModelHelper.OKViewModelResult(demoService.update(demoMango));
     }
 }

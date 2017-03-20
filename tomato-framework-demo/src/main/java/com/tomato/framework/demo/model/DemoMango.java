@@ -17,4 +17,6 @@ public class DemoMango extends BaseModel {
 
 	private String name;
 
+	private Short status;
+
 }
