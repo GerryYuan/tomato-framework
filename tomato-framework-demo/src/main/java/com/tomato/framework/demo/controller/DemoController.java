@@ -1,15 +1,15 @@
 package com.tomato.framework.demo.controller;
 
-import com.tomato.framework.core.page.Pagination;
+import com.tomato.framework.dao.page.Pagination;
 import com.tomato.framework.demo.model.DemoMango;
+import com.tomato.framework.demo.service.DemoService;
+import com.tomato.framework.rest.helper.ViewModelHelper;
+import com.tomato.framework.rest.result.ViewModelResult;
+import org.jfaster.mango.plugin.page.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.tomato.framework.demo.service.DemoService;
-import com.tomato.framework.rest.helper.ViewModelHelper;
-import com.tomato.framework.rest.result.ViewModelResult;
 
 import java.util.Date;
 
@@ -26,10 +26,8 @@ public class DemoController {
     }
 
     @RequestMapping("/get/page/{status}")
-    public ViewModelResult<?> get(@PathVariable(name = "status") short status) {
-        Pagination pagination = new Pagination();
-        pagination.setLimit(2);
-        return ViewModelHelper.OKViewModelResult(demoService.getMangos(status, pagination));
+    public ViewModelResult<?> get(Page page, @PathVariable(name = "status") short status) {
+        return ViewModelHelper.OKViewModelResult(Pagination.build(demoService.getMangos(status, page), page));
     }
 
 

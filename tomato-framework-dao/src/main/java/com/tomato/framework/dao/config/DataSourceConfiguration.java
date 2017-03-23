@@ -8,7 +8,6 @@ import com.google.common.collect.Multimap;
 import com.tomato.framework.core.common.SpecialCharConst;
 import com.tomato.framework.core.exception.DataSourceException;
 import com.tomato.framework.core.util.EmptyUtils;
-import com.tomato.framework.dao.interceptor.PageInterceptor;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.jfaster.mango.datasource.DataSourceFactory;
@@ -17,6 +16,7 @@ import org.jfaster.mango.datasource.MasterSlaveDataSourceFactory;
 import org.jfaster.mango.datasource.SimpleDataSourceFactory;
 import org.jfaster.mango.interceptor.InterceptorChain;
 import org.jfaster.mango.operator.Mango;
+import org.jfaster.mango.plugin.page.MySQLPageInterceptor;
 import org.springframework.boot.bind.RelaxedPropertyResolver;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Bean;
@@ -115,7 +115,7 @@ public class DataSourceConfiguration implements EnvironmentAware {
         initDataSources();
         Mango mango = Mango.newInstance(dataSourceFactories);
         InterceptorChain interceptorChain = new InterceptorChain();
-        interceptorChain.addInterceptor(new PageInterceptor());
+        interceptorChain.addInterceptor(new MySQLPageInterceptor());
         mango.setInterceptorChain(interceptorChain);
         return mango;
     }

@@ -1,9 +1,9 @@
 package com.tomato.framework.demo.dao;
 
-import com.tomato.framework.core.page.Pagination;
 import com.tomato.framework.demo.model.DemoMango;
 import org.jfaster.mango.annotation.DB;
 import org.jfaster.mango.annotation.SQL;
+import org.jfaster.mango.plugin.page.Page;
 
 import java.util.List;
 
@@ -24,5 +24,5 @@ public interface DemoDAO {
 	boolean deleteDemoMango(int id);
 
 	@SQL("select " + COLUMNS + " from #table where status = :1")
-	List<DemoMango> getDemoMangos(short status, Pagination pagination);
+	List<DemoMango> getDemoMangos(short status, Page page);
 }

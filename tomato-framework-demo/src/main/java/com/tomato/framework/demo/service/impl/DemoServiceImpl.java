@@ -1,9 +1,9 @@
 package com.tomato.framework.demo.service.impl;
 
-import com.tomato.framework.core.page.Pagination;
 import com.tomato.framework.demo.dao.DemoDAO;
 import com.tomato.framework.demo.model.DemoMango;
 import com.tomato.framework.demo.service.DemoService;
+import org.jfaster.mango.plugin.page.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,8 +16,8 @@ public class DemoServiceImpl implements DemoService {
     private DemoDAO demoDAO;
 
     @Override
-    public List<DemoMango> getMangos(short status, Pagination pagination) {
-        return demoDAO.getDemoMangos(status, pagination);
+    public List<DemoMango> getMangos(short status, Page page) {
+        return demoDAO.getDemoMangos(status, page);
     }
 
     @Override
