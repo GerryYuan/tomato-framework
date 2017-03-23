@@ -62,19 +62,19 @@ public class DataSourceConfiguration implements EnvironmentAware {
             for (String dataSourceName : dataSourceNames) {//dataSourceName->master_tomato_framework,slave_tomato_framework_1
                 Map<String, Object> dsParam = relaxedPropertyResolver.getSubProperties(dataSourceName + ".");
                 if (EmptyUtils.isEmpty(dsParam)) {
-                    throw new DataSourceException("properties file property start name jdbc." + dataSourceName + " is null, please check properties.");
+                    throw new DataSourceException("properties file property main name jdbc." + dataSourceName + " is null, please check properties.");
                 }
                 DataSource dataSource = new HikariDataSource(initHikariConfig(dsParam));
                 if (StringUtils.startsWithIgnoreCase(dataSourceName, MASTER)) {
                     String name = StringUtils.replace(dataSourceName, MASTER + SpecialCharConst.UNDERLINE, "");
                     if (EmptyUtils.isEmpty(name)) {
-                        throw new DataSourceException("properties file property start name jdbc." + dataSourceName + " is null, please check properties.");
+                        throw new DataSourceException("properties file property main name jdbc." + dataSourceName + " is null, please check properties.");
                     }
                     masterDataSouces.put(name, dataSource);
                 } else if (StringUtils.startsWithIgnoreCase(dataSourceName, SLAVE)) {
                     String name = StringUtils.replace(dataSourceName, SLAVE + SpecialCharConst.UNDERLINE, "");
                     if (EmptyUtils.isEmpty(name)) {
-                        throw new DataSourceException("properties file property start name jdbc." + dataSourceName + " is null, please check properties.");
+                        throw new DataSourceException("properties file property main name jdbc." + dataSourceName + " is null, please check properties.");
                     }
                     //name-> tomato_framework_1,tomato_framework_2
                     Set<String> masterNames = masterDataSouces.keySet();
@@ -85,7 +85,7 @@ public class DataSourceConfiguration implements EnvironmentAware {
                         }
                     });
                 } else {
-                    throw new DataSourceException("properties file property name 'jdbc.names' no start with master or slave, please check properties.");
+                    throw new DataSourceException("properties file property name 'jdbc.names' no main with master or slave, please check properties.");
                 }
             }
             if (EmptyUtils.isEmpty(masterDataSouces)) {

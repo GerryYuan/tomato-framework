@@ -1,9 +1,9 @@
 package com.tomato.framework.demo.main;
 
+import com.tomato.framework.core.main.Starter;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
-import com.tomato.framework.rest.main.Starter;
 
 @SpringBootApplication
 @ComponentScan({ "com.tomato.framework.demo" })
