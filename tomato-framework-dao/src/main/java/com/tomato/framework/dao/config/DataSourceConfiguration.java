@@ -10,6 +10,7 @@ import com.tomato.framework.core.exception.DataSourceException;
 import com.tomato.framework.core.util.EmptyUtils;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import lombok.extern.slf4j.Slf4j;
 import org.jfaster.mango.datasource.DataSourceFactory;
 import org.jfaster.mango.datasource.DataSourceType;
 import org.jfaster.mango.datasource.MasterSlaveDataSourceFactory;
@@ -29,7 +30,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
+@Slf4j
 @Configuration
 public class DataSourceConfiguration implements EnvironmentAware {
 
@@ -40,6 +43,8 @@ public class DataSourceConfiguration implements EnvironmentAware {
     private RelaxedPropertyResolver relaxedPropertyResolver;
 
     private List<DataSourceFactory> dataSourceFactories = Lists.newArrayList();
+
+    private AtomicInteger dataSourceCount = new AtomicInteger(0);
 
     @Override
     public void setEnvironment(Environment environment) {
@@ -95,11 +100,12 @@ public class DataSourceConfiguration implements EnvironmentAware {
                 dataSourceFactories.add(new MasterSlaveDataSourceFactory(name, master, Lists.newArrayList(slaveDataSources.get(name))));
             });
         }
+
     }
 
     private HikariConfig initHikariConfig(Map<String, Object> porpertyMap) {
         HikariConfig config = new HikariConfig();
-        config.setPoolName("spring-datasource-HikariCP");
+        config.setPoolName("spring-datasource-HikariCP-" + dataSourceCount.incrementAndGet());
         config.setConnectionTestQuery("SELECT 1");
         config.setDataSourceClassName((String) porpertyMap.get("driverClassName"));
         Properties dsProperties = new Properties();
