@@ -7,8 +7,6 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * @author Created by gerry
- * @version 1.0, 2017-03-26-11:02
- * @since com.hujiang 1.0.0
  */
 public interface RemoteCacheValueOps<V> {
 

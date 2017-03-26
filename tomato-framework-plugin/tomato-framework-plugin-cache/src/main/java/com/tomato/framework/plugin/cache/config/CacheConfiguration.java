@@ -10,8 +10,6 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 /**
  * @author Created by gerry
- * @version 1.0, 2017-03-24-18:02
- * @since com.hujiang 1.0.0
  */
 @Configuration
 public class CacheConfiguration {
