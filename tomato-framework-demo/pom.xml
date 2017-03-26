@@ -19,6 +19,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<tomato-framework.version>0.0.1-SNAPSHOT</tomato-framework.version>
+		<tomato-framework-plugin.version>0.0.1-SNAPSHOT</tomato-framework-plugin.version>
 	</properties>
 
 	<dependencies>
@@ -34,12 +35,23 @@
 			<version>${tomato-framework.version}</version>
 		</dependency>
 
-        <dependency>
+		<dependency>
             <groupId>com.tomato.framework</groupId>
             <artifactId>tomato-framework-test</artifactId>
             <version>${tomato-framework.version}</version>
         </dependency>
 
+		<dependency>
+			<groupId>com.tomato.framework</groupId>
+			<artifactId>tomato-framework-plugin-cache</artifactId>
+			<version>${tomato-framework-plugin.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.tomato.framework</groupId>
+			<artifactId>tomato-framework-plugin-pagehelper</artifactId>
+			<version>${tomato-framework-plugin.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>

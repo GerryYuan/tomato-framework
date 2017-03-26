@@ -3,6 +3,8 @@ package com.tomato.framework.demo.controller;
 import com.tomato.framework.dao.page.Pagination;
 import com.tomato.framework.demo.model.DemoMango;
 import com.tomato.framework.demo.service.DemoService;
+import com.tomato.framework.plugin.cache.common.CacheTimeoutConst;
+import com.tomato.framework.plugin.cache.ops.RemoteCacheManager;
 import com.tomato.framework.rest.helper.ViewModelHelper;
 import com.tomato.framework.rest.result.ViewModelResult;
 import org.jfaster.mango.plugin.page.Page;
@@ -20,9 +22,14 @@ public class DemoController {
     @Autowired
     private DemoService demoService;
 
+    @Autowired
+    private RemoteCacheManager<DemoMango> remoteCacheManager;
+
     @RequestMapping("/get/{id}")
     public ViewModelResult<?> get(@PathVariable(name = "id") Integer id) {
-        return ViewModelHelper.OKViewModelResult(demoService.get(id));
+        return ViewModelHelper.OKViewModelResult(remoteCacheManager.vget(id + "", s -> {
+            return demoService.get(id);
+        }, CacheTimeoutConst.HALF_AN_HOUR));
     }
 
     @RequestMapping("/get/page/{status}")

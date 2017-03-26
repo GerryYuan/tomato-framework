@@ -10,16 +10,14 @@
 	</parent>
 
 	<artifactId>tomato-framework-plugin</artifactId>
-	<packaging>jar</packaging>
+	<packaging>pom</packaging>
 	<name>tomato-framework-plugin</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<tomato-framework.version>0.0.1-SNAPSHOT</tomato-framework.version>
 	</properties>
-
-	<dependencies>
-
-	</dependencies>
-
+	<modules>
+		<module>tomato-framework-plugin-cache</module>
+		<module>tomato-framework-plugin-pagehelper</module>
+	</modules>
 </project>

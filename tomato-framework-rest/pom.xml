@@ -16,7 +16,6 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<tomato-framework.version>0.0.1-SNAPSHOT</tomato-framework.version>
-		<fastjson.version>1.2.28</fastjson.version>
 	</properties>
 
 	<dependencies>
@@ -24,11 +23,6 @@
 			<groupId>com.tomato.framework</groupId>
 			<artifactId>tomato-framework-core</artifactId>
 			<version>${tomato-framework.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.alibaba</groupId>
-			<artifactId>fastjson</artifactId>
-			<version>${fastjson.version}</version>
 		</dependency>
 	</dependencies>
 

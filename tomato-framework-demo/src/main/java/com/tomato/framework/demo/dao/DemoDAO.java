@@ -17,7 +17,7 @@ public interface DemoDAO {
 	@SQL("select " + COLUMNS + " from #table where id = :1")
 	DemoMango getDemoMango(int id);
 
-	@SQL("update #table set name=:name where id = :id")
+	@SQL("update #table vset name=:name where id = :id")
 	boolean updateDemoMango(DemoMango demoMango);
 
 	@SQL("delete from #table where id = :1")

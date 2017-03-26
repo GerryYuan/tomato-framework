@@ -16,6 +16,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<tomato-framework.version>0.0.1-SNAPSHOT</tomato-framework.version>
+		<tomato-framework-plugin.version>0.0.1-SNAPSHOT</tomato-framework-plugin.version>
 	</properties>
 
 	<dependencies>
@@ -24,19 +25,27 @@
 			<artifactId>tomato-framework-core</artifactId>
 			<version>${tomato-framework.version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>com.tomato.framework</groupId>
+			<artifactId>tomato-framework-plugin-cache</artifactId>
+			<version>${tomato-framework-plugin.version}</version>
+		</dependency>
+
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-test</artifactId>
 		</dependency>
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
-            <version>4.3.5.RELEASE</version>
         </dependency>
 
-    </dependencies>
+	</dependencies>
 </project>
