@@ -8,9 +8,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * @author Created by gerry
- * @version 1.0, 2017-03-24-00:07
- * @since com.hujiang 1.0.0
+ * Created by gerry
  */
 public class SystemClock {
     private final long period;

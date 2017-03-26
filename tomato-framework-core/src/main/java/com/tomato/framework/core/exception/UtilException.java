@@ -3,9 +3,7 @@ package com.tomato.framework.core.exception;
 import java.text.MessageFormat;
 
 /**
- * @author Created by gerry
- * @version 1.0, 2017-01-16-11:38
- * @since com.hujiang 1.0.0
+ * Created by gerry
  */
 public class UtilException extends RuntimeException {
 

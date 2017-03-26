@@ -1,5 +1,6 @@
 package com.tomato.framework.plugin.cache.ops;
 
+import com.tomato.framework.core.config.SpringApplicationContext;
 import com.tomato.framework.core.util.EmptyUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -13,101 +14,117 @@ import java.util.function.Function;
 
 /**
  * @author Created by gerry
- * @version 1.0, 2017-03-26-10:42
- * @since com.hujiang 1.0.0
+ * @param <V>
  */
 @Slf4j
 public class RemoteCacheManager<V> implements RemoteCacheValueOps<V>, RemoteCacheValueAdvanceOps<V> {
 
     private RedisTemplate<String, V> redisTemplate;
 
-    public RemoteCacheManager(RedisTemplate<String, V> redisTemplate) {
+    private static volatile RemoteCacheManager instance;
+
+    public static <V> RemoteCacheManager<V> getInstance() {
+        if (instance == null) {
+            synchronized (RemoteCacheManager.class) {
+                if (instance == null) {
+                    instance = new RemoteCacheManager<>(SpringApplicationContext.getBean("redisTemplate", RedisTemplate.class));
+                }
+            }
+        }
+        return instance;
+    }
+
+    private RemoteCacheManager(RedisTemplate<String, V> redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
 
+    private ValueOperations<String, V> getValueOps(){
+        return redisTemplate.opsForValue();
+    }
+    
     @Override
     public void vset(String key, V value) {
-        redisTemplate.opsForValue().set(key, value);
+        getValueOps().set(key, value);
     }
 
     @Override
     public void vset(String key, V value, long timeout, TimeUnit unit) {
-        redisTemplate.opsForValue().set(key, value, timeout, unit);
+        getValueOps().set(key, value, timeout, unit);
     }
 
     @Override
     public Boolean vsetIfAbsent(String key, V value) {
-        return redisTemplate.opsForValue().setIfAbsent(key, value);
+        return getValueOps().setIfAbsent(key, value);
     }
 
     @Override
     public void vmultiSet(Map<? extends String, ? extends V> map) {
-        redisTemplate.opsForValue().multiSet(map);
+        getValueOps().multiSet(map);
     }
 
     @Override
     public Boolean vmultiSetIfAbsent(Map<? extends String, ? extends V> map) {
-        return redisTemplate.opsForValue().multiSetIfAbsent(map);
+        return getValueOps().multiSetIfAbsent(map);
     }
 
     @Override
     public V vget(String key) {
-        return redisTemplate.opsForValue().get(key);
+        return getValueOps().get(key);
     }
 
     @Override
     public V vgetAndSet(String key, V value) {
-        return redisTemplate.opsForValue().getAndSet(key, value);
+        return getValueOps().getAndSet(key, value);
     }
 
     @Override
     public List<V> vmultiGet(Collection<String> keys) {
-        return redisTemplate.opsForValue().multiGet(keys);
+        return getValueOps().multiGet(keys);
     }
 
     @Override
     public Long vincrement(String key, long delta) {
-        return redisTemplate.opsForValue().increment(key, delta);
+        return getValueOps().increment(key, delta);
     }
 
     @Override
     public Double vincrement(String key, double delta) {
-        return redisTemplate.opsForValue().increment(key, delta);
+        return getValueOps().increment(key, delta);
     }
 
     @Override
     public Integer vappend(String key, String value) {
-        return redisTemplate.opsForValue().append(key, value);
+        return getValueOps().append(key, value);
     }
 
     @Override
     public String vget(String key, long start, long end) {
-        return redisTemplate.opsForValue().get(key, start, end);
+        return getValueOps().get(key, start, end);
     }
 
     @Override
     public void vset(String key, V value, long offset) {
-        redisTemplate.opsForValue().set(key, value, offset);
+        getValueOps().set(key, value, offset);
     }
 
     @Override
     public Long vsize(String key) {
-        return redisTemplate.opsForValue().size(key);
+        return getValueOps().size(key);
     }
 
     @Override
     public Boolean vsetBit(String key, long offset, boolean value) {
-        return redisTemplate.opsForValue().setBit(key, offset, value);
+        return getValueOps().setBit(key, offset, value);
     }
 
     @Override
     public Boolean vgetBit(String key, long offset) {
-        return redisTemplate.opsForValue().getBit(key, offset);
+        return getValueOps().getBit(key, offset);
     }
 
     @Override
     public V vget(String key, Function<String, V> valueLoader, long timeout) {
-        ValueOperations<String, V> valueOperations = redisTemplate.opsForValue();
+        ValueOperations<String, V> valueOperations = getValueOps();
         V value = null;
         try {
             value = valueOperations.get(key);

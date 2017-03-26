@@ -1,6 +1,5 @@
 package com.tomato.framework.plugin.cache.config;
 
-import com.tomato.framework.plugin.cache.ops.RemoteCacheManager;
 import com.tomato.framework.plugin.cache.serializer.FastJson4RedisSerializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,16 +23,11 @@ public class CacheConfiguration {
 
     @Bean
     public <T> RedisTemplate<String, T> redisTemplate(RedisConnectionFactory factory) {
-        RedisTemplate<String, T> template = new RedisTemplate<String, T>();
+        RedisTemplate<String, T> template = new RedisTemplate<>();
         template.setConnectionFactory(jedisConnectionFactory());
         template.setKeySerializer(new StringRedisSerializer());
         template.setValueSerializer(new FastJson4RedisSerializer());
         return template;
-    }
-
-    @Bean
-    public <V> RemoteCacheManager<V> remoteCacheManager() {
-        return new RemoteCacheManager<V>(redisTemplate(jedisConnectionFactory()));
     }
 
 }

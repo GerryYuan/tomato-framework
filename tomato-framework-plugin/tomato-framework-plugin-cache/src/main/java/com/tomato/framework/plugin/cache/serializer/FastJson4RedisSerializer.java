@@ -10,8 +10,6 @@ import java.nio.charset.Charset;
 
 /**
  * @author Created by gerry
- * @version 1.0, 2017-03-24-21:28
- * @since com.hujiang 1.0.0
  */
 public class FastJson4RedisSerializer implements RedisSerializer<Object> {
 

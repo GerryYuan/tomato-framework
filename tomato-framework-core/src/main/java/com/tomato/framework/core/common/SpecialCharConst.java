@@ -1,9 +1,7 @@
 package com.tomato.framework.core.common;
 
 /**
- * @author Created by gerry
- * @version 1.0, 2017-03-19-19:35
- * @since com.hujiang 1.0.0
+ * Created by gerry
  */
 public class SpecialCharConst {
 

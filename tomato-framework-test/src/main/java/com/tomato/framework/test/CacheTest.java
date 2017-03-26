@@ -8,9 +8,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 /**
- * @author Created by gerry
- * @version 1.0, 2017-03-24-18:10
- * @since com.hujiang 1.0.0
+ * Created by gerry
  */
 @RunWith(SpringRunner.class)
 @Configuration

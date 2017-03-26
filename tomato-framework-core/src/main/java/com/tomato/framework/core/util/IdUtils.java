@@ -3,9 +3,7 @@ package com.tomato.framework.core.util;
 import com.tomato.framework.core.common.SystemClock;
 
 /**
- * @author Created by gerry
- * @version 1.0, 2017-03-24-00:06
- * @since com.hujiang 1.0.0
+ * Created by gerry
  */
 public class IdUtils {
     private final long twepoch = 1288834974657L;

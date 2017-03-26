@@ -3,8 +3,7 @@ package com.tomato.framework.demo.controller;
 import com.tomato.framework.dao.page.Pagination;
 import com.tomato.framework.demo.model.DemoMango;
 import com.tomato.framework.demo.service.DemoService;
-import com.tomato.framework.plugin.cache.common.CacheTimeoutConst;
-import com.tomato.framework.plugin.cache.ops.RemoteCacheManager;
+import com.tomato.framework.plugin.cache.ops.MultiCacheManager;
 import com.tomato.framework.rest.helper.ViewModelHelper;
 import com.tomato.framework.rest.result.ViewModelResult;
 import org.jfaster.mango.plugin.page.Page;
@@ -22,14 +21,17 @@ public class DemoController {
     @Autowired
     private DemoService demoService;
 
-    @Autowired
-    private RemoteCacheManager<DemoMango> remoteCacheManager;
-
     @RequestMapping("/get/{id}")
     public ViewModelResult<?> get(@PathVariable(name = "id") Integer id) {
-        return ViewModelHelper.OKViewModelResult(remoteCacheManager.vget(id + "", s -> {
+        return ViewModelHelper.OKViewModelResult(MultiCacheManager.getInstance().vget(id + "", s -> {
             return demoService.get(id);
-        }, CacheTimeoutConst.HALF_AN_HOUR));
+        }, 120, 120 * 2));
+//        return ViewModelHelper.OKViewModelResult(RemoteCacheManager.getInstance().vget(id + "", s -> {
+//            return demoService.get(id);
+//        }, CacheTimeoutConst.HALF_AN_HOUR));
+//        return ViewModelHelper.OKViewModelResult(RemoteCacheManager.getInstance().vget(id + "", s -> {
+//            return demoService.getMangos((short) 1, new Page(1, 100));
+//        }, CacheTimeoutConst.HALF_AN_HOUR));
     }
 
     @RequestMapping("/get/page/{status}")

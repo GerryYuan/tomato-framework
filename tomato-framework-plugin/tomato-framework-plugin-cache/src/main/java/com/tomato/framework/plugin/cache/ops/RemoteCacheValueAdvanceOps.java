@@ -4,10 +4,7 @@ import java.util.function.Function;
 
 /**
  * 缓存高级版
- *
- * @author Created by gerry
- * @version 1.0, 2017-03-26-11:22
- * @since com.hujiang 1.0.0
+ * @param <V>
  */
 public interface RemoteCacheValueAdvanceOps<V> {
 
