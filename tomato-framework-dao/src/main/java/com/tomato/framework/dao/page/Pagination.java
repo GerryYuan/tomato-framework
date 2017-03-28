@@ -1,7 +1,7 @@
 package com.tomato.framework.dao.page;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
-import org.jfaster.mango.plugin.page.Page;
 
 import java.io.Serializable;
 import java.util.List;
@@ -16,6 +16,9 @@ import java.util.List;
 @Data
 public class Pagination<T> implements Serializable {
 
+    @JSONField(serialize = false)
+    private boolean isFetchTotal = true;
+
     private int offset;
 
     private int limit;
@@ -29,13 +32,4 @@ public class Pagination<T> implements Serializable {
 
     private String order;
 
-    public static <T> Pagination<T> build(List<T> rows, Page page, Pagination<T> pagination) {
-        pagination.setTotal(page.getTotal());
-        pagination.setRows(rows);
-        return pagination;
-    }
-
-    public static <T> Page convert(Pagination<T> pagination) {
-        return new Page(pagination.getOffset(), pagination.getLimit());
-    }
 }

@@ -1,14 +1,14 @@
 package com.tomato.framework.demo.service;
 
 
+import com.tomato.framework.dao.page.Pagination;
 import com.tomato.framework.demo.model.DemoMango;
-import org.jfaster.mango.plugin.page.Page;
 
 import java.util.List;
 
 public interface DemoService {
 
-	List<DemoMango> getMangos(short status, Page page);
+	List<DemoMango> getMangos(short status, Pagination<DemoMango> page);
 
 	DemoMango get(Integer id);
 

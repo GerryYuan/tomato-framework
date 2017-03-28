@@ -17,7 +17,6 @@ import org.jfaster.mango.datasource.MasterSlaveDataSourceFactory;
 import org.jfaster.mango.datasource.SimpleDataSourceFactory;
 import org.jfaster.mango.interceptor.InterceptorChain;
 import org.jfaster.mango.operator.Mango;
-import org.jfaster.mango.plugin.page.MySQLPageInterceptor;
 import org.springframework.boot.bind.RelaxedPropertyResolver;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Bean;
@@ -121,7 +120,7 @@ public class DataSourceConfiguration implements EnvironmentAware {
         initDataSources();
         Mango mango = Mango.newInstance(dataSourceFactories);
         InterceptorChain interceptorChain = new InterceptorChain();
-        interceptorChain.addInterceptor(new MySQLPageInterceptor());
+        interceptorChain.addInterceptor(new com.tomato.framework.dao.interceptor.MySQLPageInterceptor());
         mango.setInterceptorChain(interceptorChain);
         return mango;
     }

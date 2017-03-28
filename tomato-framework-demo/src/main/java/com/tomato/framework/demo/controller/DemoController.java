@@ -6,7 +6,6 @@ import com.tomato.framework.demo.service.DemoService;
 import com.tomato.framework.plugin.cache.ops.MultiCacheManager;
 import com.tomato.framework.rest.helper.ViewModelHelper;
 import com.tomato.framework.rest.result.ViewModelResult;
-import org.jfaster.mango.plugin.page.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,8 +35,8 @@ public class DemoController {
 
     @RequestMapping("/get/page/{status}")
     public ViewModelResult<?> get(Pagination pagination, @PathVariable(name = "status") short status) {
-        Page page = Pagination.convert(pagination);
-        return ViewModelHelper.OKViewModelResult(Pagination.build(demoService.getMangos(status, page), page, pagination));
+        pagination.setRows(demoService.getMangos(status, pagination));
+        return ViewModelHelper.OKViewModelResult(pagination);
     }
 
 
