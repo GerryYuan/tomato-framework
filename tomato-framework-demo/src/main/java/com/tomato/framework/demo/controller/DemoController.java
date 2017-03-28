@@ -35,8 +35,9 @@ public class DemoController {
     }
 
     @RequestMapping("/get/page/{status}")
-    public ViewModelResult<?> get(Page page, @PathVariable(name = "status") short status) {
-        return ViewModelHelper.OKViewModelResult(Pagination.build(demoService.getMangos(status, page), page));
+    public ViewModelResult<?> get(Pagination pagination, @PathVariable(name = "status") short status) {
+        Page page = Pagination.convert(pagination);
+        return ViewModelHelper.OKViewModelResult(Pagination.build(demoService.getMangos(status, page), page, pagination));
     }
 
 
