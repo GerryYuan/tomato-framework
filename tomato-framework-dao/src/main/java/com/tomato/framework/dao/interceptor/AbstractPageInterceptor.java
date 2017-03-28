@@ -22,17 +22,15 @@ public abstract class AbstractPageInterceptor extends QueryInterceptor {
             Object val = parameter.getValue();
             if (val instanceof Pagination) {
                 Pagination pagination = (Pagination) val;
-
                 // 参数检测
-                int pageNum = pagination.getOffset();
-                int pageSize = pagination.getLimit();
-                if (pageNum <= 0) {
-                    throw new PageException("pageNum need > 0, but pageNum is " + pageNum);
+                int offset = pagination.getOffset();
+                int limit = pagination.getLimit();
+                if (offset <= 0) {
+                    throw new PageException("offset need > 0, but offset is " + offset);
                 }
-                if (pageSize <= 0) {
-                    throw new PageException("pageSize need > 0, but pageSize is " + pageSize);
+                if (limit <= 0) {
+                    throw new PageException("limit need > 0, but limit is " + limit);
                 }
-
                 // 获取总数
                 if (pagination.isFetchTotal()) {
                     BoundSql totalBoundSql = boundSql.copy();
@@ -41,14 +39,12 @@ public abstract class AbstractPageInterceptor extends QueryInterceptor {
                     int total = getJdbcOperations().queryForObject(dataSource, totalBoundSql, mapper);
                     pagination.setTotal(total);
                 }
-
                 //排序处理
                 if (EmptyUtils.isNotEmpty(pagination.getSort())) {
                     boundSql.setSql(boundSql.getSql() + " order by " + pagination.getSort() + " " + (EmptyUtils.isEmpty(pagination.getOrder()) ? "" : pagination.getOrder()));
                 }
-
                 // 分页处理
-                handlePage(pageNum, pageSize, boundSql);
+                handlePage(offset, limit, boundSql);
             }
         }
     }

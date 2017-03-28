@@ -19,9 +19,9 @@ public class Pagination<T> implements Serializable {
     @JSONField(serialize = false)
     private boolean isFetchTotal = true;
 
-    private int offset;
+    private int offset = 1;
 
-    private int limit;
+    private int limit = 20;
 
     private int total;
 
