@@ -19,17 +19,24 @@ public class Pagination<T> implements Serializable {
     @JSONField(serialize = false)
     private boolean isFetchTotal = true;
 
-    private int offset = 1;
-
-    private int limit = 20;
-
-    private int total;
+//    private int offset = 1;
+//
+//    private int limit = 20;
+//
+//    private int total;
 
     // 返回结果集
-    private List<T> rows;
+    private List<T> results;
 
-    private String sort;
+//    private String sort;
+//    private String order;
 
-    private String order;
+    private String sidx;//根据字段排序
+    private String sord;//正序 倒序
+    private int page;//页码
+    private int rows;//每页条数
+    private int total;//总页数
+    private int records;//总条数
+
 
 }

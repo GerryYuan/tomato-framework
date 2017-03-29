@@ -16,6 +16,7 @@ public class MySQLPageInterceptor extends AbstractPageInterceptor {
 
     @Override
     void handlePage(int pageNum, int pageSize, BoundSql boundSql) {
+        pageNum = pageNum == 0 ? 1 : pageNum;
         int startRow = (pageNum - 1) * pageSize;
         String sql = boundSql.getSql();
         sql = sql + " limit ?, ?";

@@ -21,6 +21,11 @@ public class DemoServiceImpl implements DemoService {
     }
 
     @Override
+    public List<DemoMango> list(Pagination<DemoMango> page) {
+        return demoDAO.list(page);
+    }
+
+    @Override
     public DemoMango get(Integer id) {
         return demoDAO.getDemoMango(id);
     }

@@ -23,8 +23,8 @@ public abstract class AbstractPageInterceptor extends QueryInterceptor {
             if (val instanceof Pagination) {
                 Pagination pagination = (Pagination) val;
                 // 参数检测
-                int offset = pagination.getOffset();
-                int limit = pagination.getLimit();
+                int offset = pagination.getPage();
+                int limit = pagination.getRows();
                 if (offset <= 0) {
                     throw new PageException("offset need > 0, but offset is " + offset);
                 }
@@ -40,8 +40,8 @@ public abstract class AbstractPageInterceptor extends QueryInterceptor {
                     pagination.setTotal(total);
                 }
                 //排序处理
-                if (EmptyUtils.isNotEmpty(pagination.getSort())) {
-                    boundSql.setSql(boundSql.getSql() + " order by " + pagination.getSort() + " " + (EmptyUtils.isEmpty(pagination.getOrder()) ? "" : pagination.getOrder()));
+                if (EmptyUtils.isNotEmpty(pagination.getSidx())) {
+                    boundSql.setSql(boundSql.getSql() + " order by " + pagination.getSidx() + " " + (EmptyUtils.isEmpty(pagination.getSord()) ? "" : pagination.getSord()));
                 }
                 // 分页处理
                 handlePage(offset, limit, boundSql);

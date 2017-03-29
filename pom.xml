@@ -22,6 +22,7 @@
         <module>tomato-framework-demo</module>
         <module>tomato-framework-rest</module>
         <module>tomato-framework-plugin</module>
+        <module>tomato-framework-test</module>
     </modules>
 
     <properties>

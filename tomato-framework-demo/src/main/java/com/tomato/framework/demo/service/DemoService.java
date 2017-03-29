@@ -10,6 +10,8 @@ public interface DemoService {
 
 	List<DemoMango> getMangos(short status, Pagination<DemoMango> page);
 
+	List<DemoMango> list(Pagination<DemoMango> page);
+
 	DemoMango get(Integer id);
 
 	boolean delete(Integer id);
@@ -17,5 +19,4 @@ public interface DemoService {
 	boolean add(DemoMango demoMango);
 
 	boolean update(DemoMango demoMango);
-
 }
