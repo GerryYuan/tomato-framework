@@ -52,6 +52,13 @@
 			<artifactId>tomato-framework-plugin-pagehelper</artifactId>
 			<version>${tomato-framework-plugin.version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>com.tomato.framework</groupId>
+			<artifactId>tomato-framework-plugin-ui</artifactId>
+			<version>${tomato-framework-plugin.version}</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
