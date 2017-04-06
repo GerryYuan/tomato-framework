@@ -64,6 +64,11 @@
 			<artifactId>tomato-framework-plugin-websocket</artifactId>
 			<version>${tomato-framework-plugin.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>RELEASE</version>
+		</dependency>
 
 	</dependencies>
 
