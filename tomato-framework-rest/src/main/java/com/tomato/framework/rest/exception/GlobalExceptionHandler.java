@@ -1,7 +1,6 @@
 package com.tomato.framework.rest.exception;
 
 import com.tomato.framework.core.common.ExceptionCodeConst;
-import com.tomato.framework.rest.helper.ViewModelHelper;
 import com.tomato.framework.rest.result.ViewModelResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -23,7 +22,7 @@ public class GlobalExceptionHandler {
 			throw e;
 		}
 		log.error("system error", e);
-		return ViewModelHelper.NOViewModelResult(ExceptionCodeConst.SYS_EXCEPTION_CODE, e.getMessage());
+		return ViewModelResult.no(ExceptionCodeConst.SYS_EXCEPTION_CODE, e.getMessage());
 	}
 
 }
