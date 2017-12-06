@@ -17,7 +17,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<tomato-framework.version>0.0.1-SNAPSHOT</tomato-framework.version>
-		<dubbo.version>2.5.3</dubbo.version>
+		<dubbo.version>2.5.7</dubbo.version>
 		<curator-framework.version>3.3.0</curator-framework.version>
         <zkclient.version>0.10</zkclient.version>
 	</properties>

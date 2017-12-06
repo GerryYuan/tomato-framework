@@ -17,7 +17,7 @@ import java.util.List;
 
 @Configuration
 @ConditionalOnClass({ JSON.class })
-public class FastJsonHttpMessageConvertersConfiguration {
+public class FastJsonHttpMessageConfiguration {
 
 	private static final String DATA_FORMATE = "yyyy-MM-dd HH:mm:ss";
 
@@ -39,5 +39,5 @@ public class FastJsonHttpMessageConvertersConfiguration {
 		HttpMessageConverter<?> converter = fastConverter;
 		return new HttpMessageConverters(converter);
 	}
-	
+
 }
