@@ -19,9 +19,6 @@
     <modules>
         <module>tomato-framework-core</module>
         <module>tomato-framework-dao</module>
-        <module>tomato-framework-demo-client</module>
-        <module>tomato-framework-demo-provider</module>
-        <module>tomato-framework-demo-service</module>
         <module>tomato-framework-rest</module>
         <module>tomato-framework-plugin</module>
         <module>tomato-framework-test</module>
