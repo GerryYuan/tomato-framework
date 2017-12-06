@@ -6,7 +6,6 @@ import org.springframework.context.annotation.ComponentScan;
 
 
 @SpringBootApplication
-//@EnableDubboConfiguration
 @ComponentScan({"com.tomato.framework.demo"})
 public class StartWebApp {
 

@@ -24,11 +24,6 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>tomato-framework-demo-service</groupId>
-			<artifactId>tomato-framework-demo-service</artifactId>
-			<version>${tomato-framework.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>com.tomato.framework</groupId>
 			<artifactId>tomato-framework-rest</artifactId>
 			<version>${tomato-framework.version}</version>
@@ -39,24 +34,6 @@
             <artifactId>tomato-framework-test</artifactId>
             <version>${tomato-framework.version}</version>
         </dependency>
-
-		<dependency>
-			<groupId>com.tomato.framework</groupId>
-			<artifactId>tomato-framework-plugin-cache</artifactId>
-			<version>${tomato-framework-plugin.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.tomato.framework</groupId>
-			<artifactId>tomato-framework-plugin-ui</artifactId>
-			<version>${tomato-framework-plugin.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.tomato.framework</groupId>
-			<artifactId>tomato-framework-plugin-rpc</artifactId>
-			<version>${tomato-framework-plugin.version}</version>
-		</dependency>
 
 	</dependencies>
 
