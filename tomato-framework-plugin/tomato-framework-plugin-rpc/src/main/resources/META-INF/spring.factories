@@ -1,0 +1,5 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.tomato.framework.plugin.rpc.RPCConfig,\
+com.tomato.framework.plugin.rpc.DubboAutoConfiguration,\
+com.tomato.framework.plugin.rpc.DubboProviderAutoConfiguration,\
+com.tomato.framework.plugin.rpc.DubboConsumerAutoConfiguration

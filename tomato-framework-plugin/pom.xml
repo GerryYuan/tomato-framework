@@ -19,5 +19,9 @@
 	<modules>
 		<module>tomato-framework-plugin-cache</module>
 		<module>tomato-framework-plugin-pagehelper</module>
+		<module>tomato-framework-plugin-rmi</module>
+		<module>tomato-framework-plugin-ui</module>
+		<module>tomato-framework-plugin-rpc</module>
+		<module>tomato-framework-plugin-websocket</module>
 	</modules>
 </project>

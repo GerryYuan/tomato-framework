@@ -17,7 +17,7 @@ public class IdUtilsTest {
 
     @Test
     public void test(){
-        System.out.print(new IdUtils(0,0).nextId());
+        System.out.print(new IdUtils(31,0).nextId());
     }
 
 }

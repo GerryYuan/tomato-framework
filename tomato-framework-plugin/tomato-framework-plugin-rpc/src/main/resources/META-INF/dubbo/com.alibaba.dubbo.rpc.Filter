@@ -1,0 +1,2 @@
+dubboconsumerstatics=com.tomato.framework.plugin.rpc.listener.ConsumerInvokeStaticsFilter
+dubboproviderstatics=com.tomato.framework.plugin.rpc.listener.ProviderInvokeStaticsFilter

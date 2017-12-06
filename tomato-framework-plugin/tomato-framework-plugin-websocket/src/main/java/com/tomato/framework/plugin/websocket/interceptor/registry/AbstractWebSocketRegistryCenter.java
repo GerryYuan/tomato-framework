@@ -5,6 +5,8 @@ import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.WebSocketMessage;
 import org.springframework.web.socket.WebSocketSession;
 
+import java.io.IOException;
+
 @Slf4j
 public abstract class AbstractWebSocketRegistryCenter implements WebSocketRegistryCenter {
 
@@ -36,7 +38,7 @@ public abstract class AbstractWebSocketRegistryCenter implements WebSocketRegist
         onMessage(wss, wsm);
     }
 
-    public abstract void onMessage(WebSocketSession session, WebSocketMessage<?> wsm);
+    public abstract void onMessage(WebSocketSession session, WebSocketMessage<?> wsm) throws IOException;
 
     @Override
     public void handleTransportError(WebSocketSession session, Throwable thrwbl) throws Exception {
