@@ -16,7 +16,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<mango.version>1.5.2</mango.version>
+		<mango.version>1.6.0</mango.version>
 		<tomato-framework.version>0.0.1-SNAPSHOT</tomato-framework.version>
 	</properties>
 
@@ -37,7 +37,7 @@
 			<groupId>com.zaxxer</groupId>
 			<artifactId>HikariCP</artifactId>
 		</dependency>
-		
+
 		<!-- orm -->
 		<dependency>
 			<groupId>org.jfaster</groupId>

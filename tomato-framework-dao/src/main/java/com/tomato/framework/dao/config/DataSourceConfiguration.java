@@ -17,6 +17,7 @@ import org.jfaster.mango.datasource.MasterSlaveDataSourceFactory;
 import org.jfaster.mango.datasource.SimpleDataSourceFactory;
 import org.jfaster.mango.interceptor.InterceptorChain;
 import org.jfaster.mango.operator.Mango;
+import org.jfaster.mango.plugin.page.MySQLPageInterceptor;
 import org.springframework.boot.bind.RelaxedPropertyResolver;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Bean;
@@ -57,7 +58,7 @@ public class DataSourceConfiguration implements EnvironmentAware {
             if (EmptyUtils.isEmpty(dsParam)) {
                 return;
             }
-            DataSource dataSource = new HikariDataSource(initHikariConfig(dsParam));
+            DataSource dataSource = new HikariDataSource(getHikariConfig(dsParam));
             dataSourceFactories.add(new SimpleDataSourceFactory(SimpleDataSourceFactory.DEFULT_NAME, dataSource));
         } else {
             List<String> dataSourceNames = Splitter.on(',').trimResults().omitEmptyStrings().splitToList(dsNames);
@@ -68,7 +69,7 @@ public class DataSourceConfiguration implements EnvironmentAware {
                 if (EmptyUtils.isEmpty(dsParam)) {
                     throw new DataSourceException("properties file property main name jdbc." + dataSourceName + " is null, please check properties.");
                 }
-                DataSource dataSource = new HikariDataSource(initHikariConfig(dsParam));
+                DataSource dataSource = new HikariDataSource(getHikariConfig(dsParam));
                 if (StringUtils.startsWithIgnoreCase(dataSourceName, MASTER)) {
                     String name = StringUtils.replace(dataSourceName, MASTER + SpecialCharConst.UNDERLINE, "");
                     if (EmptyUtils.isEmpty(name)) {
@@ -102,7 +103,7 @@ public class DataSourceConfiguration implements EnvironmentAware {
 
     }
 
-    private HikariConfig initHikariConfig(Map<String, Object> porpertyMap) {
+    private HikariConfig getHikariConfig(Map<String, Object> porpertyMap) {
         HikariConfig config = new HikariConfig();
         config.setPoolName("spring-datasource-HikariCP-" + dataSourceCount.incrementAndGet());
         config.setConnectionTestQuery("SELECT 1");
@@ -120,7 +121,7 @@ public class DataSourceConfiguration implements EnvironmentAware {
         initDataSources();
         Mango mango = Mango.newInstance(dataSourceFactories);
         InterceptorChain interceptorChain = new InterceptorChain();
-        interceptorChain.addInterceptor(new com.tomato.framework.dao.interceptor.MySQLPageInterceptor());
+        interceptorChain.addInterceptor(new MySQLPageInterceptor());
         mango.setInterceptorChain(interceptorChain);
         return mango;
     }
