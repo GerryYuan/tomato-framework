@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.tomato.framework</groupId>
 		<artifactId>tomato-framework</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>1.0.1-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
@@ -15,8 +15,8 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<tomato-framework.version>0.0.1-SNAPSHOT</tomato-framework.version>
-		<tomato-framework-plugin.version>0.0.1-SNAPSHOT</tomato-framework-plugin.version>
+		<tomato-framework.version>1.0.1-SNAPSHOT</tomato-framework.version>
+		<tomato-framework-plugin.version>1.0.1-SNAPSHOT</tomato-framework-plugin.version>
 	</properties>
 
 	<dependencies>

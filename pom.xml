@@ -5,7 +5,7 @@
 
     <groupId>com.tomato.framework</groupId>
     <artifactId>tomato-framework</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>tomato-framework</name>
     <url>http://maven.apache.org</url>
