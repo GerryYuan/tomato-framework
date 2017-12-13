@@ -2,6 +2,7 @@ package com.tomato.framework.plugin.cache.ops;
 
 import com.tomato.framework.core.config.SpringApplicationContext;
 import com.tomato.framework.core.util.EmptyUtils;
+import java.util.concurrent.Callable;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -41,7 +42,7 @@ public class RemoteCacheManager<V> implements RemoteCacheValueOps<V>, RemoteCach
     private ValueOperations<String, V> getValueOps(){
         return redisTemplate.opsForValue();
     }
-    
+
     @Override
     public void vset(String key, V value) {
         getValueOps().set(key, value);
@@ -123,7 +124,7 @@ public class RemoteCacheManager<V> implements RemoteCacheValueOps<V>, RemoteCach
     }
 
     @Override
-    public V vget(String key, Function<String, V> valueLoader, long timeout) {
+    public V vget(String key, Callable<V> callable, long timeout) {
         ValueOperations<String, V> valueOperations = getValueOps();
         V value = null;
         try {
@@ -131,13 +132,13 @@ public class RemoteCacheManager<V> implements RemoteCacheValueOps<V>, RemoteCach
             if (EmptyUtils.isNotEmpty(value)) {
                 return value;
             }
-            if (EmptyUtils.isEmpty(valueLoader)) {
+            if (EmptyUtils.isEmpty(callable)) {
                 return value;
             }
+            value = callable.call();
         } catch (Exception e) {
             log.error("deserialize key [{}] object error, maybe object property is miss or order changed, return null.", key, e);
         }
-        value = valueLoader.apply(key);
         if (EmptyUtils.isEmpty(value)) {
             return value;
         }
@@ -149,8 +150,8 @@ public class RemoteCacheManager<V> implements RemoteCacheValueOps<V>, RemoteCach
     }
 
     @Override
-    public V vget(String key, Function<String, V> valueLoader) {
-        return vget(key, valueLoader, 0);
+    public V vget(String key, Callable<V> callable) {
+        return vget(key, callable, 0);
     }
 
 }
