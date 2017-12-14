@@ -6,6 +6,7 @@ import com.tomato.framework.plugin.cache.handler.AbstractLocalCacheInstanceHandl
 import com.tomato.framework.plugin.cache.handler.ILocalCacheInstanceHandler;
 import com.tomato.framework.plugin.cache.handler.SimpleLocalInstanceHandler;
 
+import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
@@ -29,13 +30,11 @@ public class MultiCacheManager {
 
     /**
      * 缓存
-     * @param redisKey
-     * @param valueLoader
-     * @param localTimeout  一级缓存时间
+     *
+     * @param localTimeout 一级缓存时间
      * @param remoteTimeout 二级缓存时间
-     * @return
      */
-    public <V> V vget(String redisKey, Function<String, V> valueLoader, Integer localTimeout, Integer remoteTimeout) {
+    public <V> V vget(String redisKey, Callable<V> callable, Integer localTimeout, Integer remoteTimeout) {
         ILocalCacheInstanceHandler localHandler = new AbstractLocalCacheInstanceHandler() {
             @Override
             public LocalCacheExpire expire() {
@@ -53,7 +52,7 @@ public class MultiCacheManager {
         if (EmptyUtils.isNotEmpty(value)) {
             return value;
         }
-        value = RemoteCacheManager.<V>getInstance().vget(redisKey, valueLoader, remoteTimeout);
+        value = RemoteCacheManager.<V>getInstance().vget(redisKey, callable, remoteTimeout);
         if (EmptyUtils.isNotEmpty(value)) {
             localCacheOpsExt.put(redisKey, value);
         }
@@ -63,19 +62,20 @@ public class MultiCacheManager {
     /**
      *
      * @param redisKey
-     * @param valueLoader
+     * @param callable
      * @param remoteTimeout
      * @param <V>
      * @return
      */
-    public <V> V vget(String redisKey, Function<String, V> valueLoader, Integer remoteTimeout) {
+    public <V> V vget(String redisKey, Callable<V> callable, Integer remoteTimeout) {
         //一级缓存有数据，直接返回，没有数据到二级缓存查，二级缓存有则吧数据放到一级缓存，没有则从数据库拿，然后放到一二级缓存
-        LocalCacheOps<V> localCacheOpsExt = LocalCacheManager.<V>getInstance().getCacheOps(new SimpleLocalInstanceHandler());
+        LocalCacheOps<V> localCacheOpsExt = LocalCacheManager.<V>getInstance()
+            .getCacheOps(new SimpleLocalInstanceHandler());
         V value = localCacheOpsExt.get(redisKey);
         if (EmptyUtils.isNotEmpty(value)) {
             return value;
         }
-        value = RemoteCacheManager.<V>getInstance().vget(redisKey, valueLoader, remoteTimeout);
+        value = RemoteCacheManager.<V>getInstance().vget(redisKey, callable, remoteTimeout);
         if (EmptyUtils.isNotEmpty(value)) {
             localCacheOpsExt.put(redisKey, value);
         }

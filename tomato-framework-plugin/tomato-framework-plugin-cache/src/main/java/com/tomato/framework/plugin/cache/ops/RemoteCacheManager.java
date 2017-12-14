@@ -1,6 +1,7 @@
 package com.tomato.framework.plugin.cache.ops;
 
 import com.tomato.framework.core.config.SpringApplicationContext;
+import com.tomato.framework.core.exception.SysException;
 import com.tomato.framework.core.util.EmptyUtils;
 import java.util.concurrent.Callable;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +16,6 @@ import java.util.function.Function;
 
 /**
  * @author Created by gerry
- * @param <V>
  */
 @Slf4j
 public class RemoteCacheManager<V> implements RemoteCacheValueOps<V>, RemoteCacheValueAdvanceOps<V> {
@@ -28,7 +28,8 @@ public class RemoteCacheManager<V> implements RemoteCacheValueOps<V>, RemoteCach
         if (instance == null) {
             synchronized (RemoteCacheManager.class) {
                 if (instance == null) {
-                    instance = new RemoteCacheManager<>(SpringApplicationContext.getBean("redisTemplate", RedisTemplate.class));
+                    instance = new RemoteCacheManager<>(
+                        SpringApplicationContext.getBean("redisTemplate", RedisTemplate.class));
                 }
             }
         }
@@ -39,7 +40,7 @@ public class RemoteCacheManager<V> implements RemoteCacheValueOps<V>, RemoteCach
         this.redisTemplate = redisTemplate;
     }
 
-    private ValueOperations<String, V> getValueOps(){
+    private ValueOperations<String, V> getValueOps() {
         return redisTemplate.opsForValue();
     }
 
@@ -135,9 +136,14 @@ public class RemoteCacheManager<V> implements RemoteCacheValueOps<V>, RemoteCach
             if (EmptyUtils.isEmpty(callable)) {
                 return value;
             }
+        } catch (Exception e) {
+            log.error("deserialize key [{}] object error, maybe object property is miss or order changed, return null.",
+                key, e);
+        }
+        try {
             value = callable.call();
         } catch (Exception e) {
-            log.error("deserialize key [{}] object error, maybe object property is miss or order changed, return null.", key, e);
+            throw new RuntimeException(e);
         }
         if (EmptyUtils.isEmpty(value)) {
             return value;

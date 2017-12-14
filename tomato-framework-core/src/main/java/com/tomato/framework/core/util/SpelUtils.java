@@ -1,11 +1,17 @@
 package com.tomato.framework.core.util;
 
+import com.tomato.framework.core.exception.SysException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.Signature;
+import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.cglib.core.ReflectUtils;
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
@@ -19,6 +25,20 @@ public class SpelUtils {
     private static ExpressionParser expressionParser = new SpelExpressionParser();
 
     private static LocalVariableTableParameterNameDiscoverer localVariableParameterName = new LocalVariableTableParameterNameDiscoverer();
+
+    public static Method getMethod(JoinPoint jp) {
+        Signature sig = jp.getSignature();
+        if (!(sig instanceof MethodSignature)) {
+            throw new SysException("该注解只能用于方法");
+        }
+        MethodSignature msig = (MethodSignature) sig;
+        Object target = jp.getTarget();
+        try {
+            return target.getClass().getMethod(msig.getName(), msig.getParameterTypes());
+        } catch (NoSuchMethodException e) {
+            throw new SysException(e.getMessage());
+        }
+    }
 
     /**
      * @param key
