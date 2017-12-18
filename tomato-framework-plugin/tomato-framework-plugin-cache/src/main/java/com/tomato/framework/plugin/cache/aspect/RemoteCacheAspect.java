@@ -14,6 +14,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
 @Aspect
 @Component
@@ -22,15 +23,14 @@ public class RemoteCacheAspect {
 
     @Around(" @annotation(rc) ")
     public Object aroundMethod(ProceedingJoinPoint jp, RemoteCache rc) {
-        Method method = SpelUtils.getMethod(jp);
-        Object[] args = jp.getArgs();
-        String key = (String) SpelUtils.parseKey(rc.key(), method, args);
+        String key = (String) SpelUtils.parseKey(rc.key(), SpelUtils.getMethod(jp), jp.getArgs());
+        Assert.notNull(key, "non null key required");
         log.debug("remote cache annotation key: " + key);
         return RemoteCacheManager.getInstance().vget(key, () -> {
             try {
                 return jp.proceed();
             } catch (Throwable throwable) {
-                throw new SysException(throwable.getMessage());
+                throw new RuntimeException(throwable.getMessage());
             }
         }, rc.timeUnit().toSeconds(rc.expire()));
     }

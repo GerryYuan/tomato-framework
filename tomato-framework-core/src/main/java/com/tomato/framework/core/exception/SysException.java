@@ -8,7 +8,7 @@ public class SysException extends RuntimeException {
     private static final long serialVersionUID = 3116483353040779859L;
 
     @Getter
-    private int errorCode = ExceptionCodeConst.SYS_EXCEPTION_CODE;
+    private int errorCode = ExceptionCodeConst.SYS_CODE;
 
     public SysException(String msg) {
         super(msg);

@@ -22,7 +22,7 @@ public class GlobalExceptionHandler {
 			throw e;
 		}
 		log.error("system error", e);
-		return ViewModelResult.no(ExceptionCodeConst.SYS_EXCEPTION_CODE, e.getMessage());
+		return ViewModelResult.no(ExceptionCodeConst.SYS_CODE, e.getMessage());
 	}
 
 }

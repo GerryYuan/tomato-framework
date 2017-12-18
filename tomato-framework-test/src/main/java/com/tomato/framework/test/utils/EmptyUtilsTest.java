@@ -1,4 +1,4 @@
-package com.tomato.framework.test;
+package com.tomato.framework.test.utils;
 
 /**
  * @author gerry

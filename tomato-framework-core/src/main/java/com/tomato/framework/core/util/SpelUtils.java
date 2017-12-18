@@ -1,5 +1,6 @@
 package com.tomato.framework.core.util;
 
+import com.google.common.base.Strings;
 import com.tomato.framework.core.exception.SysException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -8,10 +9,8 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.springframework.cglib.core.ReflectUtils;
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
@@ -46,9 +45,12 @@ public class SpelUtils {
      * @param paraValues
      * @return
      */
-    public static Object parseKey(String key, Method method, Object[] paraValues) {
+    public static String parseKey(String key, Method method, Object[] paraValues) {
         if (EmptyUtils.isEmpty(method) || EmptyUtils.isEmpty(key)) {
             return null;
+        }
+        if (!key.contains("#")) {
+            return key;
         }
         if (EmptyUtils.isEmpty(paraValues)) {
             return key;
@@ -63,10 +65,10 @@ public class SpelUtils {
             StandardEvaluationContext context = new StandardEvaluationContext();
             AtomicInteger i = new AtomicInteger(0);
             Arrays.stream(paraNames).forEach(paraName -> context.setVariable(paraName, paraValues[i.getAndAdd(1)]));
-            return expressionParser.parseExpression(key).getValue(context);
+            return expressionParser.parseExpression(key).getValue(context, String.class);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            return null;
+            return key;
         }
     }
 

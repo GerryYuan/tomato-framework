@@ -9,7 +9,7 @@ import lombok.Getter;
 public class DataSourceException extends RuntimeException{
 
     @Getter
-    private int errorCode = ExceptionCodeConst.DATASOURCE_EXCEPTION_CODE;
+    private int errorCode = ExceptionCodeConst.DATASOURCE_CODE;
 
     public DataSourceException(String msg) {
         super(msg);
