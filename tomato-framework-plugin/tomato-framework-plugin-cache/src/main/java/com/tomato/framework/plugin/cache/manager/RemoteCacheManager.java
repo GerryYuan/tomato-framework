@@ -1,8 +1,9 @@
-package com.tomato.framework.plugin.cache.ops;
+package com.tomato.framework.plugin.cache.manager;
 
 import com.tomato.framework.core.config.SpringApplicationContext;
-import com.tomato.framework.core.exception.SysException;
 import com.tomato.framework.core.util.EmptyUtils;
+import com.tomato.framework.plugin.cache.ops.RemoteCacheAdvanceOps;
+import com.tomato.framework.plugin.cache.ops.RemoteCacheOps;
 import java.util.concurrent.Callable;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -12,13 +13,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
 
 /**
  * @author Created by gerry
  */
 @Slf4j
-public class RemoteCacheManager<V> implements RemoteCacheValueOps<V>, RemoteCacheValueAdvanceOps<V> {
+public class RemoteCacheManager<V> implements RemoteCacheOps<V>, RemoteCacheAdvanceOps<V> {
 
     private RedisTemplate<String, V> redisTemplate;
 

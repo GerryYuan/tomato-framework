@@ -1,4 +1,4 @@
-package com.tomato.framework.plugin.cache.ops;
+package com.tomato.framework.plugin.cache.manager;
 
 import com.google.common.cache.CacheBuilder;
 import com.tomato.framework.core.util.EmptyUtils;
@@ -6,6 +6,7 @@ import com.tomato.framework.plugin.cache.expire.LocalCacheExpire;
 import com.tomato.framework.plugin.cache.handler.ILocalCacheInstanceHandler;
 import com.tomato.framework.plugin.cache.handler.SimpleLocalInstanceHandler;
 
+import com.tomato.framework.plugin.cache.ops.LocalCacheOps;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.concurrent.ConcurrentHashMap;

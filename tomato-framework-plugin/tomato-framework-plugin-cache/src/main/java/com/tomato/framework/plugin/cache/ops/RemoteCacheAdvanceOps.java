@@ -7,7 +7,7 @@ import java.util.function.Function;
  * 缓存高级版
  * @param <V>
  */
-public interface RemoteCacheValueAdvanceOps<V> {
+public interface RemoteCacheAdvanceOps<V> {
 
     /**
      * 获取V，高级版

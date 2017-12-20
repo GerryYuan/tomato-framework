@@ -3,6 +3,8 @@ package com.tomato.framework.plugin.cache.ops;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheStats;
 import com.google.common.collect.ImmutableMap;
+import com.tomato.framework.core.exception.CacheException;
+import com.tomato.framework.core.exception.SysException;
 import com.tomato.framework.core.util.EmptyUtils;
 
 import java.util.Map;
@@ -10,13 +12,14 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Created by gerry
- *
- * @param <V>
  */
+@Slf4j
 public class LocalCacheOps<V> {
+
     private Cache<String, V> cache;
 
     public LocalCacheOps(Cache<String, V> cache) {
@@ -27,18 +30,28 @@ public class LocalCacheOps<V> {
         return cache.getIfPresent(key);
     }
 
-    public V get(String key, Callable<? extends V> valueLoader) throws ExecutionException {
-        return cache.get(key, valueLoader);
+    public V get(String key, Callable<? extends V> callable) throws ExecutionException {
+        try {
+            V v = cache.getIfPresent(key);
+            if (EmptyUtils.isNotEmpty(v)) {
+                return v;
+            }
+            v = callable.call();
+            if (EmptyUtils.isEmpty(v)) {
+                return v;
+            }
+            cache.put(key, v);
+            return v;
+        } catch (Exception e) {
+            throw new CacheException(e.getMessage(), e);
+        }
     }
 
     public V get(String key) {
         try {
-            return cache.get(key, new Callable<V>() {
-                public V call() {
-                    return null;
-                }
-            });
+            return cache.getIfPresent(key);
         } catch (Exception e) {
+            log.error(e.getMessage(), e);
             return null;
         }
     }
@@ -82,19 +95,5 @@ public class LocalCacheOps<V> {
     public void cleanUp() {
         cache.cleanUp();
     }
-
-    public V get(String key, Function<String, V> valueLoader) {
-        V value = get(key);
-        if (EmptyUtils.isNotEmpty(value)) {
-            return value;
-        }
-        value = valueLoader.apply(key);
-        if (EmptyUtils.isEmpty(value)) {
-            return value;
-        }
-        put(key, value);
-        return value;
-    }
-
 
 }

@@ -17,6 +17,7 @@ import org.springframework.test.context.junit4.SpringRunner;
  */
 @Slf4j
 public class CacheTest {
+
     ApplicationContext ctx = new AnnotationConfigApplicationContext(TestsConfiguration.class);
 
     @Test
@@ -25,5 +26,7 @@ public class CacheTest {
         log.info(cacheAnnotationService.testRemoteCache("localCache", true).getName());
     }
 
-
+    @Test
+    public void localCache() throws Exception {
+    }
 }

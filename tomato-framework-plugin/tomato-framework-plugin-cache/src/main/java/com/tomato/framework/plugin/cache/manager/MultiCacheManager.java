@@ -1,4 +1,4 @@
-package com.tomato.framework.plugin.cache.ops;
+package com.tomato.framework.plugin.cache.manager;
 
 import com.tomato.framework.core.util.EmptyUtils;
 import com.tomato.framework.plugin.cache.expire.LocalCacheExpire;
@@ -6,9 +6,9 @@ import com.tomato.framework.plugin.cache.handler.AbstractLocalCacheInstanceHandl
 import com.tomato.framework.plugin.cache.handler.ILocalCacheInstanceHandler;
 import com.tomato.framework.plugin.cache.handler.SimpleLocalInstanceHandler;
 
+import com.tomato.framework.plugin.cache.ops.LocalCacheOps;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
 
 /**
  * @author Created by gerry

@@ -17,7 +17,7 @@ public class SpelCacheAspect {
     public Object aroundMethod(ProceedingJoinPoint jp, SpelCache rc) throws Throwable {
         String key = SpelUtils.parseKey(rc.key(), SpelUtils.getMethod(jp), jp.getArgs());
         Assert.notNull(key, "non null key required");
-        log.info("remote cache annotation key: " + key);
+        log.debug("remote cache annotation key: " + key);
         return jp.proceed();
     }
 }
