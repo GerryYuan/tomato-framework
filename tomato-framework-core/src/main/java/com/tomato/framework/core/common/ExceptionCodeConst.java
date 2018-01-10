@@ -1,9 +1,13 @@
 package com.tomato.framework.core.common;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * Created by gerry
  */
-public class ExceptionCodeConst {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class ExceptionCodeConst {
 
     public static final int SYS_CODE = 50000;
 
