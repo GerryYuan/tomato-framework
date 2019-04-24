@@ -55,7 +55,7 @@ public final class EmptyUtils {
 	 * @return
 	 */
 	public static <K, V> boolean isNotEmpty(Map<K, V> map) {
-		return (map == null || map.isEmpty());
+		return !isEmpty(map);
 	}
 
 	/**

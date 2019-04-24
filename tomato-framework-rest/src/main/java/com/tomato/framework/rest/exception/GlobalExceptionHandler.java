@@ -1,7 +1,7 @@
 package com.tomato.framework.rest.exception;
 
 import com.tomato.framework.core.common.ExceptionCodeConst;
-import com.tomato.framework.rest.result.ViewModelResult;
+import com.tomato.framework.rest.result.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -17,12 +17,12 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(value = Exception.class)
 	@ResponseBody
-	public ViewModelResult<?> defaultErrorHandler(HttpServletRequest req, Exception e) throws Exception {
+	public Result<?> defaultErrorHandler(HttpServletRequest req, Exception e) throws Exception {
 		if (AnnotationUtils.findAnnotation(e.getClass(), ResponseStatus.class) != null) {
 			throw e;
 		}
 		log.error("system error", e);
-		return ViewModelResult.no(ExceptionCodeConst.SYS_CODE, e.getMessage());
+		return Result.no(ExceptionCodeConst.SYS_CODE, e.getMessage());
 	}
 
 }
