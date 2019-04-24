@@ -1,6 +1,6 @@
 package com.tomato.framework.dao.config;
 
-import com.alibaba.druid.pool.DruidDataSource;
+import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceBuilder;
 import com.alibaba.druid.support.http.StatViewServlet;
 import com.alibaba.druid.support.http.WebStatFilter;
 import com.google.common.collect.ImmutableMap;
@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
 /**
- * Created by gerry
+ * @author gerry
  */
 @Slf4j
 @Configuration
@@ -28,8 +28,7 @@ public class DaoConfig {
     @Bean
     @ConfigurationProperties(prefix = "spring.datasource")
     public DataSource druidDataSource() {
-        DruidDataSource druidDataSource = new DruidDataSource();
-        return druidDataSource;
+        return DruidDataSourceBuilder.create().build();
     }
     
     /**

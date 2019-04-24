@@ -43,7 +43,7 @@
 		<!-- datasource -->
 		<dependency>
 			<groupId>com.alibaba</groupId>
-			<artifactId>druid</artifactId>
+			<artifactId>druid-spring-boot-starter</artifactId>
 			<version>1.1.16</version>
 		</dependency>
 
