@@ -8,23 +8,23 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public final class HttpClient {
+public final class HttpClientUtil {
     
-    private static volatile HttpClient instance;
+    private static volatile HttpClientUtil instance;
     
     private OkHttpClient client;
     
-    public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
+    private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
     
-    public HttpClient(OkHttpClient okHttpClient) {
+    public HttpClientUtil(OkHttpClient okHttpClient) {
         this.client = okHttpClient;
     }
     
-    public static HttpClient getInstance() {
+    public static HttpClientUtil getInstance() {
         if (instance == null) {
-            synchronized (HttpClient.class) {
+            synchronized (HttpClientUtil.class) {
                 if (instance == null) {
-                    instance = new HttpClient(new OkHttpClient());
+                    instance = new HttpClientUtil(new OkHttpClient());
                 }
             }
         }
