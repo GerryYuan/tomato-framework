@@ -79,13 +79,7 @@ public final class EmptyUtils {
 	 *
 	 * */
 	public static <T> boolean isNotEmpty(T[] datas) {
-		if (ObjectUtils.isEmpty(datas)) {
-			if (datas.length == 0) {
-				return false;
-			}
-			return true;
-		}
-		return true;
+		return !isEmpty(datas);
 	}
 
 	/**
@@ -93,7 +87,7 @@ public final class EmptyUtils {
 	 *
 	 * */
 	public static <T> boolean isEmpty(T[] datas) {
-		return !isNotEmpty(datas);
+		return ObjectUtils.isEmpty(datas);
 	}
 
 

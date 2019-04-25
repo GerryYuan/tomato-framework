@@ -47,17 +47,4 @@ public class DaoConfig {
         return servletRegistrationBean;
     }
     
-    /**
-     * druid的过滤器设置
-     */
-    @Bean
-    public FilterRegistrationBean filterRegistrationBean() {
-        FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
-        filterRegistrationBean.setFilter(new WebStatFilter());
-        filterRegistrationBean.addUrlPatterns("/*");
-        filterRegistrationBean
-            .addInitParameter("exclusions", "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*,*.properties");
-        return filterRegistrationBean;
-    }
-    
 }

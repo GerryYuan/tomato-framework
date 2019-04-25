@@ -12,7 +12,10 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class FilterConfig {
-
+    
+    /**
+     * druid的过滤器设置
+     */
     @Bean
     public FilterRegistrationBean filterRegistrationBean() {
         FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
