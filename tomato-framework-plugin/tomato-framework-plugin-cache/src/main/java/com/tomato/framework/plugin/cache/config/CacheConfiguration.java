@@ -1,6 +1,6 @@
 package com.tomato.framework.plugin.cache.config;
 
-import com.tomato.framework.plugin.cache.serializer.FastJson4RedisSerializer;
+import com.alibaba.fastjson.support.spring.FastJsonRedisSerializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -24,7 +24,7 @@ public class CacheConfiguration {
         RedisTemplate<String, T> template = new RedisTemplate<>();
         template.setConnectionFactory(jedisConnectionFactory());
         template.setKeySerializer(new StringRedisSerializer());
-        template.setValueSerializer(new FastJson4RedisSerializer());
+        template.setValueSerializer(new FastJsonRedisSerializer<>(Object.class));
         return template;
     }
 
