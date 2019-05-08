@@ -23,5 +23,6 @@
 		<module>tomato-framework-plugin-ui</module>
 		<module>tomato-framework-plugin-rpc</module>
 		<module>tomato-framework-plugin-websocket</module>
-	</modules>
+        <module>tomato-framework-plugin-mqtt</module>
+    </modules>
 </project>
