@@ -35,7 +35,6 @@ public class MQTTConfig {
         mqttConnectOptions
             .setServerURIs(Splitter.on(",").splitToList(mqttProperties.getUrl()).stream().toArray(String[]::new));
         mqttConnectOptions.setKeepAliveInterval(2);
-        mqttConnectOptions.setCleanSession(false);
         return mqttConnectOptions;
     }
     
