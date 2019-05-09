@@ -1,8 +1,14 @@
 package com.tomato.framework.plugin.mqtt.config;
 
+import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Splitter;
-import com.tomato.framework.plugin.mqtt.properties.MQTTProperties;
+import com.tomato.framework.plugin.mqtt.exception.MqttException;
+import com.tomato.framework.plugin.mqtt.invoke.MqttInvoke;
+import com.tomato.framework.plugin.mqtt.invoke.MqttInvokePlugin;
+import com.tomato.framework.plugin.mqtt.invoke.MqttMessageHeader;
+import com.tomato.framework.plugin.mqtt.properties.MqttProperties;
 import javax.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -19,13 +25,14 @@ import org.springframework.integration.mqtt.support.DefaultPahoMessageConverter;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.MessageHandler;
 
+@Slf4j
 @Configuration
 @IntegrationComponentScan(basePackages = {"com.tomato.framework.plugin.mqtt"})
-@EnableConfigurationProperties({MQTTProperties.class})
-public class MQTTConfig {
+@EnableConfigurationProperties({MqttProperties.class})
+public class MqttConfig {
     
     @Resource
-    private MQTTProperties mqttProperties;
+    private MqttProperties mqttProperties;
     
     @Bean
     public MqttConnectOptions getMqttConnectOptions() {
@@ -34,7 +41,7 @@ public class MQTTConfig {
         mqttConnectOptions.setPassword(mqttProperties.getPassword().toCharArray());
         mqttConnectOptions
             .setServerURIs(Splitter.on(",").splitToList(mqttProperties.getUrl()).stream().toArray(String[]::new));
-        mqttConnectOptions.setKeepAliveInterval(2);
+        mqttConnectOptions.setKeepAliveInterval(mqttProperties.getKeepAliveInterval());
         return mqttConnectOptions;
     }
     
@@ -55,27 +62,32 @@ public class MQTTConfig {
     @Bean
     public MessageProducer inbound(MqttPahoClientFactory mqttPahoClientFactory) {
         MqttPahoMessageDrivenChannelAdapter adapter = new MqttPahoMessageDrivenChannelAdapter(
-            mqttProperties.getInbound().getClientId(), mqttPahoClientFactory,
-            Splitter.on(",").omitEmptyStrings().splitToList(mqttProperties.getInbound().getTopic()).stream()
+            mqttProperties.getSubscribeId(), mqttPahoClientFactory,
+            Splitter.on(",").omitEmptyStrings().splitToList(mqttProperties.getTopics()).stream()
                 .toArray(String[]::new));
-        adapter.setCompletionTimeout(mqttProperties.getInbound().getCompletionTimeout());
+        adapter.setCompletionTimeout(mqttProperties.getCompletionTimeout());
         adapter.setConverter(new DefaultPahoMessageConverter());
-        adapter.setQos(1);
+        adapter.setQos(mqttProperties.getQos());
         adapter.setOutputChannel(mqttInputChannel());
         return adapter;
     }
     
     // 通过通道获取数据（建议在逻辑处理层实现MessageHandler接口）
-//    @Bean
-//    @ServiceActivator(inputChannel = "mqttInputChannel")
-//    public MessageHandler receiveHandler() {
-//        return message -> {
-//            //MessageHeaders headers = message.getHeaders();
-//            String m = message.getPayload().toString();
-//            // 处理数据交给具体的业务层
-//            System.out.println(m);
-//        };
-//    }
+    @Bean
+    @ServiceActivator(inputChannel = "mqttInputChannel")
+    public MessageHandler receiveHandler() {
+        return message -> {
+            JSONObject jsonObject = new JSONObject(message.getHeaders());
+            MqttMessageHeader mqttMessageHeader = jsonObject.toJavaObject(MqttMessageHeader.class);
+            String msg = message.getPayload().toString();
+            log.info("监听到topic[{}],消息[{}]", mqttMessageHeader.getTopic(), msg);
+            MqttInvoke mqttInvoke = MqttInvokePlugin.getInstance().get(mqttMessageHeader.getTopic());
+            if (mqttInvoke == null) {
+                throw new MqttException("topic["+mqttMessageHeader.getTopic()+"]没有处理handle，处理失败");
+            }
+            mqttInvoke.invoke(message.getPayload().toString());
+        };
+    }
     
     // 推送通道
     @Bean
@@ -87,10 +99,10 @@ public class MQTTConfig {
     @ServiceActivator(inputChannel = "mqttOutputChannel")
     public MessageHandler sendHandler(MqttPahoClientFactory mqttPahoClientFactory) {
         MqttPahoMessageHandler messageHandler = new MqttPahoMessageHandler(
-            mqttProperties.getOutbound().getClientId(), mqttPahoClientFactory);
+            mqttProperties.getPublisherId(), mqttPahoClientFactory);
         messageHandler.setAsync(true);
-        messageHandler.setDefaultQos(1);
-        messageHandler.setDefaultTopic(mqttProperties.getOutbound().getTopic());
+        messageHandler.setDefaultQos(mqttProperties.getQos());
+        messageHandler.setDefaultTopic(mqttProperties.getDefaultTopic());
         return messageHandler;
     }
     

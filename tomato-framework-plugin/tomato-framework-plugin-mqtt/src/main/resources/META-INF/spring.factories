@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.tomato.framework.plugin.mqtt.config.MQTTConfig
+com.tomato.framework.plugin.mqtt.config.MqttConfig
