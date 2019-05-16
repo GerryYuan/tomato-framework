@@ -1,9 +1,11 @@
 package com.tomato.framework.plugin.rmi.annotation;
 
 import com.tomato.framework.plugin.rmi.enums.ServiceType;
-import org.springframework.stereotype.Component;
-
-import java.lang.annotation.*;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * @author Created by gerry
@@ -13,7 +15,6 @@ import java.lang.annotation.*;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD, ElementType.METHOD})
-@Component
 public @interface RemoteReference {
 
     String url();

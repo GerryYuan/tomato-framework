@@ -19,6 +19,7 @@ public class RMIServerImpl implements RMIServer {
     public void publish(Object service, int port) {
         try (ServerSocket serverSocket = new ServerSocket(port)) {
             log.info("创建socket端口{}，发布服务service{}", port, service);
+            RMIRegisterConfig.bind(service);
             while (true) {
                 //循环监听serversocket产生的输入流，然后读取调用相应的方法
                 Socket socket = serverSocket.accept();

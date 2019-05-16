@@ -19,11 +19,6 @@ public class ServerProcessHanlder implements Runnable {
     
     private Object service;
     
-    /**
-     * 服务端发布的服务
-     */
-    private Map<String,Object> services;
-    
     public ServerProcessHanlder(Socket socket, Object service) {
         this.socket = socket;
         this.service = service;
@@ -61,7 +56,7 @@ public class ServerProcessHanlder implements Runnable {
         Object[] parameters = rpcRequest.getParamters();
         Class<?>[] parameterTypes = Arrays.stream(parameters).map(s -> s.getClass()).toArray(Class[]::new);
         //从Map中获得Service（根据客户端请求的ServiceName，获得相应的服务），依旧是通过反射发起调用
-        Object service = services.get(rpcRequest.getClassName());
+        Object service = RMIRegisterConfig.get(rpcRequest.getClassName());
         Method method = service.getClass().getMethod(rpcRequest.getMethodName(), parameterTypes);
         return method.invoke(service, parameters);
     }
