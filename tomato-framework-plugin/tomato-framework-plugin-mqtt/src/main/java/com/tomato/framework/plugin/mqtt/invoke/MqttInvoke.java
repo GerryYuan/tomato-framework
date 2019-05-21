@@ -1,10 +1,12 @@
 package com.tomato.framework.plugin.mqtt.invoke;
 
+import com.tomato.framework.plugin.mqtt.msg.MsgContext;
+
 /**
- * @author user
+ * @author yuanguohua
  */
-public interface MqttInvoke {
+public interface MqttInvoke<T> {
     
-    void invoke(String msg);
+    void invoke(MsgContext<T> msgContext);
     
 }
