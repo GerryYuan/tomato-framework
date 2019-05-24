@@ -29,6 +29,7 @@
         <guava.version>27.1-jre</guava.version>
         <lombok.version>1.18.6</lombok.version>
         <fastjson.version>1.2.57</fastjson.version>
+        <cglib.version>3.2.12</cglib.version>
     </properties>
 
     <distributionManagement>
@@ -91,6 +92,13 @@
             <artifactId>fastjson</artifactId>
             <version>${fastjson.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib</artifactId>
+            <version>${cglib.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
