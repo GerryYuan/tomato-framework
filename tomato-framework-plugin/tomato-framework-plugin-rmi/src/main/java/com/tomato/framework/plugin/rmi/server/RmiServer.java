@@ -9,7 +9,7 @@ import java.rmi.registry.Registry;
 import java.util.Arrays;
 import java.util.List;
 
-public class Rmi2Server implements Server {
+public class RmiServer implements Server {
     
     private String address = "rmi://127.0.0.1";
     
@@ -19,11 +19,11 @@ public class Rmi2Server implements Server {
     
     private Registry registry;
     
-    public Rmi2Server(Register... register) {
+    public RmiServer(Register... register) {
         Arrays.stream(register).forEach(r -> this.registers.add(r));
     }
     
-    public Rmi2Server(String address, int port, Register register) {
+    public RmiServer(String address, int port, Register register) {
         this.address = address;
         this.port = port;
         this.registers.add(register);

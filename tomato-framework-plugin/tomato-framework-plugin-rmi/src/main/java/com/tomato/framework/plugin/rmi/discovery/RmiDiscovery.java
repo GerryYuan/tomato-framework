@@ -10,7 +10,10 @@ public class RmiDiscovery implements Discovery {
     
     private String address = "rmi://127.0.0.1";
     
-    private int port;
+    private int port = 18080;
+    
+    public RmiDiscovery() {
+    }
     
     public RmiDiscovery(String address, int port) {
         this.address = address;
