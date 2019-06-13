@@ -5,6 +5,7 @@ import com.tomato.framework.plugin.rmi.exception.RmiException;
 import com.tomato.framework.plugin.rmi.register.Register;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.util.Arrays;
 import java.util.List;
 
@@ -15,6 +16,8 @@ public class Rmi2Server implements Server {
     private int port = 18080;
     
     private List<Register> registers = Lists.newArrayListWithCapacity(100);
+    
+    private Registry registry;
     
     public Rmi2Server(Register... register) {
         Arrays.stream(register).forEach(r -> this.registers.add(r));
@@ -28,7 +31,7 @@ public class Rmi2Server implements Server {
     
     @Override
     public void start() throws RemoteException {
-        LocateRegistry.createRegistry(port);
+        this.registry = LocateRegistry.createRegistry(port);
         registers.stream().forEach(r -> {
             try {
                 r.register(address, port);
@@ -40,6 +43,7 @@ public class Rmi2Server implements Server {
     
     @Override
     public void stop() {
+        System.exit(0);
     }
     
 }
