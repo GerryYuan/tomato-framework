@@ -158,9 +158,8 @@ public class RemoteCacheManager<V> implements RemoteCacheOps<V>, RemoteCacheAdva
         if (EmptyUtils.isEmpty(value)) {
             return value;
         }
-        valueOperations.set(key, value);
         if (timeout > 0) {
-            redisTemplate.expire(key, timeout, TimeUnit.SECONDS);
+            valueOperations.set(key, value, timeout, TimeUnit.SECONDS);
         }
         return value;
     }
