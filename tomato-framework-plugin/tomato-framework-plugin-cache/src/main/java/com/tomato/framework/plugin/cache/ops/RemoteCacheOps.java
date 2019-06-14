@@ -9,7 +9,22 @@ import java.util.concurrent.TimeUnit;
  * @author Created by gerry
  */
 public interface RemoteCacheOps<V> {
-
+    
+    /**
+     * Set {@code value} for {@code key}.
+     *
+     * @param key must not be {@literal null}.
+     * @see <a href="https://redis.io/commands/del">Redis Documentation: del</a>
+     */
+    void delete(String key);
+    
+    /**
+     * Set {@code value} for {@code key}.
+     *
+     * @param keys must not be {@literal null}.
+     * @see <a href="https://redis.io/commands/del">Redis Documentation: del</a>
+     */
+    void delete(Collection<String> keys);
 
     /**
      * Set {@code value} for {@code key}.

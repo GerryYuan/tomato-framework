@@ -1,12 +1,18 @@
 package com.tomato.framework.plugin.mqtt.config;
 
-import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Splitter;
+import com.google.common.collect.Maps;
 import com.tomato.framework.plugin.mqtt.exception.MqttException;
 import com.tomato.framework.plugin.mqtt.invoke.MqttInvoke;
 import com.tomato.framework.plugin.mqtt.invoke.MqttInvokePlugin;
-import com.tomato.framework.plugin.mqtt.invoke.MqttMessageHeader;
+import com.tomato.framework.plugin.mqtt.msg.MsgContext;
+import com.tomato.framework.plugin.mqtt.msg.MsgContextHeader;
 import com.tomato.framework.plugin.mqtt.properties.MqttProperties;
+import com.tomato.framework.plugin.mqtt.serializer.MqttFastJsonSerializer;
+import com.tomato.framework.plugin.mqtt.serializer.Serializer;
+import java.lang.reflect.ParameterizedType;
+import java.nio.charset.Charset;
+import java.util.Map;
 import javax.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
@@ -34,6 +40,13 @@ public class MqttConfig {
     @Resource
     private MqttProperties mqttProperties;
     
+    /**
+     * 序列化
+     */
+    private Serializer serializer;
+    
+    private Map<MqttInvoke, Class<? extends Object>> clazzMap = Maps.newConcurrentMap();
+    
     @Bean
     public MqttConnectOptions getMqttConnectOptions() {
         MqttConnectOptions mqttConnectOptions = new MqttConnectOptions();
@@ -42,6 +55,9 @@ public class MqttConfig {
         mqttConnectOptions
             .setServerURIs(Splitter.on(",").splitToList(mqttProperties.getUrl()).stream().toArray(String[]::new));
         mqttConnectOptions.setKeepAliveInterval(mqttProperties.getKeepAliveInterval());
+        if (serializer == null) {
+            serializer = new MqttFastJsonSerializer(Charset.defaultCharset());
+        }
         return mqttConnectOptions;
     }
     
@@ -77,15 +93,19 @@ public class MqttConfig {
     @ServiceActivator(inputChannel = "mqttInputChannel")
     public MessageHandler receiveHandler() {
         return message -> {
-            JSONObject jsonObject = new JSONObject(message.getHeaders());
-            MqttMessageHeader mqttMessageHeader = jsonObject.toJavaObject(MqttMessageHeader.class);
+            MsgContextHeader header = serializer.deserializeHeader(message.getHeaders());
             String msg = message.getPayload().toString();
-            log.info("监听到topic[{}],消息[{}]", mqttMessageHeader.getTopic(), msg);
-            MqttInvoke mqttInvoke = MqttInvokePlugin.getInstance().get(mqttMessageHeader.getTopic());
+            MqttInvoke<?> mqttInvoke = MqttInvokePlugin.getInstance().get(header.getTopic());
             if (mqttInvoke == null) {
-                throw new MqttException("topic["+mqttMessageHeader.getTopic()+"]没有处理handle，处理失败");
+                throw new MqttException("topic[" + header.getTopic() + "]没有处理handle，处理失败");
             }
-            mqttInvoke.invoke(message.getPayload().toString());
+            if (!clazzMap.containsKey(mqttInvoke)) {
+                ParameterizedType type = (ParameterizedType) mqttInvoke.getClass()
+                    .getGenericSuperclass();
+                clazzMap.put(mqttInvoke, (Class<? extends Object>) type.getActualTypeArguments()[0]);
+            }
+            mqttInvoke.invoke(new MsgContext(header,
+                serializer.deserialize(msg.getBytes(Charset.defaultCharset()), clazzMap.get(mqttInvoke))));
         };
     }
     

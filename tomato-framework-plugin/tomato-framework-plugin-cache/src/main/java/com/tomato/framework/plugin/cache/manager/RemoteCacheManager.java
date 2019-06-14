@@ -43,7 +43,17 @@ public class RemoteCacheManager<V> implements RemoteCacheOps<V>, RemoteCacheAdva
     private ValueOperations<String, V> getValueOps() {
         return redisTemplate.opsForValue();
     }
-
+    
+    @Override
+    public void delete(String key) {
+        redisTemplate.delete(key);
+    }
+    
+    @Override
+    public void delete(Collection<String> keys) {
+        redisTemplate.delete(keys);
+    }
+    
     @Override
     public void vset(String key, V value) {
         getValueOps().set(key, value);
@@ -148,9 +158,8 @@ public class RemoteCacheManager<V> implements RemoteCacheOps<V>, RemoteCacheAdva
         if (EmptyUtils.isEmpty(value)) {
             return value;
         }
-        valueOperations.set(key, value);
         if (timeout > 0) {
-            redisTemplate.expire(key, timeout, TimeUnit.SECONDS);
+            valueOperations.set(key, value, timeout, TimeUnit.SECONDS);
         }
         return value;
     }
