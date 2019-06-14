@@ -3,21 +3,24 @@ package com.tomato.framework.core.util;
 import java.util.Collection;
 import java.util.Map;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 /**
  * 判空工具类
- * 
+ *
  *
  * @author gerry
  * @version  1.0, 2016年9月2日下午6:48:52
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class EmptyUtils {
 
 	/**
 	 * 判断集合是否为空 coll->null->true coll-> coll.size() == 0 -> true
-	 * 
+	 *
 	 * @param coll
 	 * @return
 	 */
@@ -27,7 +30,7 @@ public final class EmptyUtils {
 
 	/**
 	 * 判断集合是否不为空
-	 * 
+	 *
 	 * @param coll
 	 * @return
 	 */
@@ -37,7 +40,7 @@ public final class EmptyUtils {
 
 	/**
 	 * 判断map是否为空
-	 * 
+	 *
 	 * @param map
 	 * @return
 	 */
@@ -47,17 +50,17 @@ public final class EmptyUtils {
 
 	/**
 	 * 判断map是否不为空
-	 * 
+	 *
 	 * @param map
 	 * @return
 	 */
 	public static <K, V> boolean isNotEmpty(Map<K, V> map) {
-		return (map == null || map.isEmpty());
+		return !isEmpty(map);
 	}
 
 	/**
 	 * 判断一个对象是否为空
-	 * 
+	 *
 	 * @param t
 	 * @return
 	 */
@@ -70,33 +73,27 @@ public final class EmptyUtils {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * 判断数组是否不为空
-	 * 
+	 *
 	 * */
 	public static <T> boolean isNotEmpty(T[] datas) {
-		if (ObjectUtils.isEmpty(datas)) {
-			if (datas.length == 0) {
-				return false;
-			}
-			return true;
-		}
-		return true;
+		return !isEmpty(datas);
 	}
-	
+
 	/**
 	 * 判断数组是否不为空
-	 * 
+	 *
 	 * */
 	public static <T> boolean isEmpty(T[] datas) {
-		return !isNotEmpty(datas);
+		return ObjectUtils.isEmpty(datas);
 	}
-	
+
 
 	/**
 	 * 判断一个对象是否不为空
-	 * 
+	 *
 	 * @param t
 	 * @return
 	 */

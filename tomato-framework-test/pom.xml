@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.tomato.framework</groupId>
 		<artifactId>tomato-framework</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>1.0.1-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
@@ -15,35 +15,43 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<tomato-framework.version>1.0.1-SNAPSHOT</tomato-framework.version>
+		<tomato-framework-plugin.version>1.0.1-SNAPSHOT</tomato-framework-plugin.version>
 	</properties>
 
 	<dependencies>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>org.springframework.boot</groupId>
-					<artifactId>spring-boot-starter-logging</artifactId>
-				</exclusion>
-			</exclusions>
-			<scope>test</scope>
+			<groupId>com.tomato.framework</groupId>
+			<artifactId>tomato-framework-core</artifactId>
+			<version>${tomato-framework.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.tomato.framework</groupId>
+			<artifactId>tomato-framework-rest</artifactId>
+			<version>${tomato-framework.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.tomato.framework</groupId>
+			<artifactId>tomato-framework-plugin-cache</artifactId>
+			<version>${tomato-framework-plugin.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-			<scope>test</scope>
-		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-test</artifactId>
-			<scope>test</scope>
 		</dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+        </dependency>
 
 	</dependencies>
 </project>
