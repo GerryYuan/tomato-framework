@@ -1,9 +1,8 @@
 package com.tomato.framework.plugin.rmi.register;
 
-import java.net.MalformedURLException;
+import com.tomato.framework.plugin.rmi.exception.RmiException;
 import java.rmi.Naming;
 import java.rmi.Remote;
-import java.rmi.RemoteException;
 
 public class RmiRegister implements Register {
     
@@ -17,7 +16,11 @@ public class RmiRegister implements Register {
     }
     
     @Override
-    public <T extends Remote> void register(String address, int port) throws RemoteException, MalformedURLException {
-        Naming.rebind(address.concat(":" + port) + "/" + className, (Remote) service);
+    public <T extends Remote> void register(String address, int port) {
+        try {
+            Naming.rebind(address.concat(":" + port) + "/" + className, (Remote) service);
+        } catch (Exception e) {
+            throw new RmiException(e);
+        }
     }
 }

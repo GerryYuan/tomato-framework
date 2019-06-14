@@ -1,10 +1,8 @@
 package com.tomato.framework.plugin.rmi.discovery;
 
-import java.net.MalformedURLException;
+import com.tomato.framework.plugin.rmi.exception.RmiException;
 import java.rmi.Naming;
-import java.rmi.NotBoundException;
 import java.rmi.Remote;
-import java.rmi.RemoteException;
 
 public class RmiDiscovery implements Discovery {
     
@@ -21,8 +19,11 @@ public class RmiDiscovery implements Discovery {
     }
     
     @Override
-    public <T extends Remote> T getBean(String className)
-        throws RemoteException, NotBoundException, MalformedURLException {
-        return (T) Naming.lookup(address.concat(":" + port) + "/" + className);
+    public <T extends Remote> T getBean(Class<T> clazz) {
+        try {
+            return (T) Naming.lookup(address.concat(":" + port) + "/" + clazz.getSimpleName());
+        } catch (Exception e) {
+            throw new RmiException(e);
+        }
     }
 }
