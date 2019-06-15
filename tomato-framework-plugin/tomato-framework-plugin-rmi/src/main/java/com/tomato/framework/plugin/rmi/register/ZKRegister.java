@@ -1,9 +1,11 @@
 package com.tomato.framework.plugin.rmi.register;
 
 import com.google.common.collect.Maps;
+import com.sun.jndi.toolkit.url.Uri;
 import com.tomato.framework.plugin.rmi.exception.RmiException;
 import java.rmi.Naming;
 import java.rmi.Remote;
+import java.rmi.registry.LocateRegistry;
 import java.util.Map;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
@@ -15,8 +17,6 @@ public class ZKRegister implements Register {
     private Map<String, Object> services = Maps.newConcurrentMap();
     
     private String address;
-    
-    private int port;
     
     private CuratorFramework curatorFramework;
     
@@ -30,11 +30,10 @@ public class ZKRegister implements Register {
     
     private final static int ZK_RETRIES = 3;
     
-    public <T extends Remote> ZKRegister(String address, int port, Map<String, T> services) {
+    public <T extends Remote> ZKRegister(String address, Map<String, T> services) {
         this.services.putAll(services);
         this.address = address;
-        this.port = port;
-        this.curatorFramework = CuratorFrameworkFactory.builder().connectString(address.concat(":" + port))
+        this.curatorFramework = CuratorFrameworkFactory.builder().connectString(address)
             .sessionTimeoutMs(ZK_SESSION_TIME_OUTMS)
             .connectionTimeoutMs(ZK_CONNECT_TIME_OUTMS)
             .retryPolicy(new ExponentialBackoffRetry(ZK_RETRY_SLEEP_TIMEMS, ZK_RETRIES))
@@ -43,12 +42,13 @@ public class ZKRegister implements Register {
     }
     
     @Override
-    public <T extends Remote> void register(String address, int port) {
-        String url = address.concat(":" + port);
+    public <T extends Remote> void register(String address) {
         services.forEach((k, v) -> {
             try {
                 curatorFramework.create().withMode(CreateMode.EPHEMERAL).forPath("/".concat(k));
-                Naming.rebind(url + "/" + k, (Remote) v);
+                Uri uri = new Uri(address);
+                LocateRegistry.createRegistry(uri.getPort());
+                Naming.rebind(address.concat("/").concat(k), (Remote) v);
             } catch (Exception e) {
                 throw new RmiException(e);
             }

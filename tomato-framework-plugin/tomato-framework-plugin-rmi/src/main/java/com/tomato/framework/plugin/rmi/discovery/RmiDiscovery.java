@@ -6,22 +6,19 @@ import java.rmi.Remote;
 
 public class RmiDiscovery implements Discovery {
     
-    private String address = "rmi://127.0.0.1";
-    
-    private int port = 18080;
+    private String address = "rmi://127.0.0.1:18080";
     
     public RmiDiscovery() {
     }
     
-    public RmiDiscovery(String address, int port) {
+    public RmiDiscovery(String address) {
         this.address = address;
-        this.port = port;
     }
     
     @Override
     public <T extends Remote> T getBean(Class<T> clazz) {
         try {
-            return (T) Naming.lookup(address.concat(":" + port) + "/" + clazz.getSimpleName());
+            return (T) Naming.lookup(address.concat("/").concat(clazz.getName()));
         } catch (Exception e) {
             throw new RmiException(e);
         }

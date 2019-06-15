@@ -4,5 +4,5 @@ import java.rmi.Remote;
 
 public interface Register {
     
-    <T extends Remote> void register(String address, int port);
+    <T extends Remote> void register(String address);
 }

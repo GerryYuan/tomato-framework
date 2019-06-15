@@ -17,7 +17,7 @@ public class ZKDiscovery implements Discovery {
     
     private String address;
     
-    private int port;
+    private String serverUrl;
     
     private CuratorFramework curatorFramework;
     
@@ -33,25 +33,31 @@ public class ZKDiscovery implements Discovery {
     
     private List<String> services = Lists.newArrayList();
     
-    public ZKDiscovery(String address, int port) {
+    public ZKDiscovery(String address, String serverUrl) {
         this.address = address;
-        this.port = port;
-        this.curatorFramework = CuratorFrameworkFactory.builder().connectString(address.concat(":" + port))
+        this.serverUrl = serverUrl;
+        this.curatorFramework = CuratorFrameworkFactory.builder().connectString(address)
             .sessionTimeoutMs(ZK_SESSION_TIME_OUTMS)
             .connectionTimeoutMs(ZK_CONNECT_TIME_OUTMS)
             .retryPolicy(new ExponentialBackoffRetry(ZK_RETRY_SLEEP_TIMEMS, ZK_RETRIES))
             .namespace(ZK_BASE_NODE).build();
         curatorFramework.start();
         init();
-        PathChildrenCache pathChildrenCache = new PathChildrenCache(curatorFramework, ZK_BASE_NODE, true);
+        PathChildrenCache pathChildrenCache = new PathChildrenCache(curatorFramework, "/", true);
         pathChildrenCache.getListenable().addListener((client, event) -> {
             switch (event.getType()) {
                 case CHILD_REMOVED:
                     services.remove(event.getData().getPath());
+                    System.out.println("服务下线：" + event.getData().getPath());
                 default:
                     break;
             }
         });
+        try {
+            pathChildrenCache.start();
+        } catch (Exception e) {
+            throw new RmiException(e);
+        }
     }
     
     private void init() {
@@ -69,11 +75,11 @@ public class ZKDiscovery implements Discovery {
     @Override
     public <T extends Remote> T getBean(Class<T> clazz) {
         try {
-            String className = "/".concat(clazz.getSimpleName());
+            String className = clazz.getName();
             if (EmptyUtils.isEmpty(this.services) || !services.contains(className)) {
                 throw new RmiException("没有相关服务提供者【" + className + "】");
             }
-            return (T) Naming.lookup("rmi://".concat(address).concat(":" + port) + "/" + className);
+            return (T) Naming.lookup(serverUrl.concat("/").concat(className));
         } catch (Exception e) {
             throw new RmiException(e);
         }
