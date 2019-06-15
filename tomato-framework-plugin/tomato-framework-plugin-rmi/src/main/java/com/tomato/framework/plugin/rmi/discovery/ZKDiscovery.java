@@ -1,11 +1,13 @@
 package com.tomato.framework.plugin.rmi.discovery;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.tomato.framework.core.util.EmptyUtils;
 import com.tomato.framework.plugin.rmi.exception.RmiException;
 import java.rmi.Naming;
 import java.rmi.Remote;
 import java.util.List;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
@@ -16,8 +18,6 @@ import org.apache.curator.retry.ExponentialBackoffRetry;
 public class ZKDiscovery implements Discovery {
     
     private String address;
-    
-    private String serverUrl;
     
     private CuratorFramework curatorFramework;
     
@@ -31,11 +31,10 @@ public class ZKDiscovery implements Discovery {
     
     private final static int ZK_RETRIES = 3;
     
-    private List<String> services = Lists.newArrayList();
+    private Map<String, List<String>> services = Maps.newConcurrentMap();
     
-    public ZKDiscovery(String address, String serverUrl) {
+    public ZKDiscovery(String address) {
         this.address = address;
-        this.serverUrl = serverUrl;
         this.curatorFramework = CuratorFrameworkFactory.builder().connectString(address)
             .sessionTimeoutMs(ZK_SESSION_TIME_OUTMS)
             .connectionTimeoutMs(ZK_CONNECT_TIME_OUTMS)
@@ -62,9 +61,17 @@ public class ZKDiscovery implements Discovery {
     
     private void init() {
         try {
-            List<String> services = curatorFramework.getChildren().forPath("/");
+            String path = "/";
+            List<String> services = curatorFramework.getChildren().forPath(path);
             if (EmptyUtils.isNotEmpty(services)) {
-                this.services.addAll(services);
+                services.forEach(s -> {
+                    try {
+                        String address = new String(curatorFramework.getData().forPath(path.concat(s)));
+                        this.services.put(s, Lists.newArrayList(address));
+                    } catch (Exception e) {
+                        throw new RmiException(e);
+                    }
+                });
             }
         } catch (Exception e) {
             log.error("无服务提供者", e);
@@ -76,10 +83,11 @@ public class ZKDiscovery implements Discovery {
     public <T extends Remote> T getBean(Class<T> clazz) {
         try {
             String className = clazz.getName();
-            if (EmptyUtils.isEmpty(this.services) || !services.contains(className)) {
+            if (EmptyUtils.isEmpty(this.services) || !services.keySet().contains(className)) {
                 throw new RmiException("没有相关服务提供者【" + className + "】");
             }
-            return (T) Naming.lookup(serverUrl.concat("/").concat(className));
+            List<String> paths = services.get(className);
+            return (T) Naming.lookup(paths.get(0).concat("/").concat(className));
         } catch (Exception e) {
             throw new RmiException(e);
         }
