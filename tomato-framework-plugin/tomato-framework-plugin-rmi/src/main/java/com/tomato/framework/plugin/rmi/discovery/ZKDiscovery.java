@@ -46,12 +46,13 @@ public class ZKDiscovery implements Discovery {
         init();
         services.forEach((k, v) -> {
             try {
+                String path = ZKUtils.getClientListenerUrl(k);
                 PathChildrenCache pathChildrenCache = new PathChildrenCache(curatorFramework,
-                    ZKUtils.getClientListenerUrl(k), true);
+                    path, true);
                 pathChildrenCache.getListenable().addListener((client, event) -> {
                     switch (event.getType()) {
                         case CHILD_REMOVED:
-                            services.remove(event.getData().getPath());
+                            services.remove(path);
                             System.out.println("服务下线：" + event.getData().getPath());
                         default:
                             break;
