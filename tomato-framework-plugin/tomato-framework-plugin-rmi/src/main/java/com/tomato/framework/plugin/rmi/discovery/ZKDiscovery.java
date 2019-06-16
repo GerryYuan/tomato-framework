@@ -4,10 +4,12 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.tomato.framework.core.util.EmptyUtils;
 import com.tomato.framework.plugin.rmi.exception.RmiException;
+import com.tomato.framework.plugin.rmi.utils.ZKUtils;
 import java.rmi.Naming;
 import java.rmi.Remote;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
@@ -42,37 +44,54 @@ public class ZKDiscovery implements Discovery {
             .namespace(ZK_BASE_NODE).build();
         curatorFramework.start();
         init();
-        PathChildrenCache pathChildrenCache = new PathChildrenCache(curatorFramework, "/", true);
-        pathChildrenCache.getListenable().addListener((client, event) -> {
-            switch (event.getType()) {
-                case CHILD_REMOVED:
-                    services.remove(event.getData().getPath());
-                    System.out.println("服务下线：" + event.getData().getPath());
-                default:
-                    break;
+        services.forEach((k, v) -> {
+            try {
+                PathChildrenCache pathChildrenCache = new PathChildrenCache(curatorFramework,
+                    ZKUtils.getClientListenerUrl(k), true);
+                pathChildrenCache.getListenable().addListener((client, event) -> {
+                    switch (event.getType()) {
+                        case CHILD_REMOVED:
+                            services.remove(event.getData().getPath());
+                            System.out.println("服务下线：" + event.getData().getPath());
+                        default:
+                            break;
+                    }
+                });
+                pathChildrenCache.start();
+            } catch (Exception e) {
+                throw new RmiException(e);
             }
+            
         });
-        try {
-            pathChildrenCache.start();
-        } catch (Exception e) {
-            throw new RmiException(e);
-        }
+        
     }
     
     private void init() {
         try {
             String path = "/";
             List<String> services = curatorFramework.getChildren().forPath(path);
-            if (EmptyUtils.isNotEmpty(services)) {
-                services.forEach(s -> {
-                    try {
-                        String address = new String(curatorFramework.getData().forPath(path.concat(s)));
-                        this.services.put(s, Lists.newArrayList(address));
-                    } catch (Exception e) {
-                        throw new RmiException(e);
-                    }
-                });
+            if (EmptyUtils.isEmpty(services)) {
+                return;
             }
+            services.forEach(s -> {
+                try {
+                    String childPath = path.concat(s);
+                    List<String> ips = curatorFramework.getChildren().forPath(childPath);
+                    if (EmptyUtils.isEmpty(ips)) {
+                        return;
+                    }
+                    this.services.put(s, Lists.newArrayList(ips.stream().map(ip -> {
+                        try {
+                            String url = childPath.concat("/").concat(ip);
+                            return new String(curatorFramework.getData().forPath(url));
+                        } catch (Exception e) {
+                            throw new RmiException(e);
+                        }
+                    }).collect(Collectors.toList())));
+                } catch (Exception e) {
+                    throw new RmiException(e);
+                }
+            });
         } catch (Exception e) {
             log.error("无服务提供者", e);
         }

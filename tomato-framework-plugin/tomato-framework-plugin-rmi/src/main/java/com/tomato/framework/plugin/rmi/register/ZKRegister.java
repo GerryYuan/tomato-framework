@@ -2,6 +2,7 @@ package com.tomato.framework.plugin.rmi.register;
 
 import com.google.common.collect.Maps;
 import com.tomato.framework.plugin.rmi.exception.RmiException;
+import com.tomato.framework.plugin.rmi.utils.ZKUtils;
 import java.nio.charset.Charset;
 import java.rmi.Naming;
 import java.rmi.Remote;
@@ -44,8 +45,9 @@ public class ZKRegister implements Register {
     public <T extends Remote> void register(String address) {
         services.forEach((k, v) -> {
             try {
-                curatorFramework.create().withMode(CreateMode.EPHEMERAL)
-                    .forPath("/".concat(k), address.getBytes(Charset.defaultCharset()));
+                String path = ZKUtils.getServerRegisterUrl(k);
+                curatorFramework.create().creatingParentsIfNeeded().withMode(CreateMode.EPHEMERAL)
+                    .forPath(path, address.getBytes(Charset.defaultCharset()));
                 Naming.rebind(address.concat("/").concat(k), (Remote) v);
             } catch (Exception e) {
                 throw new RmiException(e);
@@ -53,4 +55,5 @@ public class ZKRegister implements Register {
         });
         
     }
+    
 }
