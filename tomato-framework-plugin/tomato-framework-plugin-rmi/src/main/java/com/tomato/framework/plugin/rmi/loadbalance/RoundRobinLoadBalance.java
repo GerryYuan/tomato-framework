@@ -3,7 +3,7 @@ package com.tomato.framework.plugin.rmi.loadbalance;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class RoundRobin implements LoadBalance {
+public class RoundRobinLoadBalance implements LoadBalance {
     
     private AtomicInteger pos = new AtomicInteger(0);
     

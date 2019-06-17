@@ -5,7 +5,7 @@ import com.google.common.collect.Sets;
 import com.tomato.framework.core.util.EmptyUtils;
 import com.tomato.framework.plugin.rmi.exception.RmiException;
 import com.tomato.framework.plugin.rmi.loadbalance.LoadBalance;
-import com.tomato.framework.plugin.rmi.loadbalance.RoundRobin;
+import com.tomato.framework.plugin.rmi.loadbalance.RoundRobinLoadBalance;
 import com.tomato.framework.plugin.rmi.utils.ZKUtils;
 import java.rmi.Naming;
 import java.rmi.Remote;
@@ -38,7 +38,7 @@ public class ZKDiscovery implements Discovery {
     
     private Map<String, Set<String>> services = Maps.newConcurrentMap();
     
-    private LoadBalance loadBalance = new RoundRobin();
+    private LoadBalance loadBalance = new RoundRobinLoadBalance();
     
     public ZKDiscovery(String address) {
         this.address = address;
