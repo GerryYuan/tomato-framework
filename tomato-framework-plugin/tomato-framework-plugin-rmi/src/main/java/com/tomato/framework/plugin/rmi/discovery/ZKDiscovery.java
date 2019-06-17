@@ -1,7 +1,7 @@
 package com.tomato.framework.plugin.rmi.discovery;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import com.tomato.framework.core.util.EmptyUtils;
 import com.tomato.framework.plugin.rmi.exception.RmiException;
 import com.tomato.framework.plugin.rmi.utils.ZKUtils;
@@ -9,6 +9,7 @@ import java.rmi.Naming;
 import java.rmi.Remote;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.curator.framework.CuratorFramework;
@@ -33,7 +34,7 @@ public class ZKDiscovery implements Discovery {
     
     private final static int ZK_RETRIES = 3;
     
-    private Map<String, List<String>> services = Maps.newConcurrentMap();
+    private Map<String, Set<String>> services = Maps.newConcurrentMap();
     
     public ZKDiscovery(String address) {
         this.address = address;
@@ -46,14 +47,24 @@ public class ZKDiscovery implements Discovery {
         init();
         services.forEach((k, v) -> {
             try {
+                if (!services.keySet().contains(k)) {
+                    services.put(k, Sets.newHashSet());
+                }
                 String path = ZKUtils.getClientListenerUrl(k);
                 PathChildrenCache pathChildrenCache = new PathChildrenCache(curatorFramework,
                     path, true);
                 pathChildrenCache.getListenable().addListener((client, event) -> {
                     switch (event.getType()) {
                         case CHILD_REMOVED:
-                            services.remove(path);
+                            services.get(k).remove(path);
                             System.out.println("服务下线：" + event.getData().getPath());
+                            log.warn("服务下线：{}", event.getData().getPath());
+                            break;
+                        case CHILD_ADDED:
+                            services.get(k).add(new String(event.getData().getData()));
+                            System.out.println("服务上线：" + event.getData().getPath());
+                            log.warn("服务上线：{}", event.getData().getPath());
+                            break;
                         default:
                             break;
                     }
@@ -81,14 +92,14 @@ public class ZKDiscovery implements Discovery {
                     if (EmptyUtils.isEmpty(ips)) {
                         return;
                     }
-                    this.services.put(s, Lists.newArrayList(ips.stream().map(ip -> {
+                    this.services.put(s, Sets.newHashSet(ips.stream().map(ip -> {
                         try {
                             String url = childPath.concat("/").concat(ip);
                             return new String(curatorFramework.getData().forPath(url));
                         } catch (Exception e) {
                             throw new RmiException(e);
                         }
-                    }).collect(Collectors.toList())));
+                    }).collect(Collectors.toSet())));
                 } catch (Exception e) {
                     throw new RmiException(e);
                 }
@@ -106,8 +117,11 @@ public class ZKDiscovery implements Discovery {
             if (EmptyUtils.isEmpty(this.services) || !services.keySet().contains(className)) {
                 throw new RmiException("没有相关服务提供者【" + className + "】");
             }
-            List<String> paths = services.get(className);
-            return (T) Naming.lookup(paths.get(0).concat("/").concat(className));
+            Set<String> paths = services.get(className);
+            if (EmptyUtils.isEmpty(paths)) {
+                throw new RmiException("没有相关服务提供者【" + className + "】");
+            }
+            return (T) Naming.lookup(paths.iterator().next().concat("/").concat(className));
         } catch (Exception e) {
             throw new RmiException(e);
         }
