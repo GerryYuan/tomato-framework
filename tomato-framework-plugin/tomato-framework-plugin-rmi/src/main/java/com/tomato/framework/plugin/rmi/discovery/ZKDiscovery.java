@@ -4,6 +4,8 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.tomato.framework.core.util.EmptyUtils;
 import com.tomato.framework.plugin.rmi.exception.RmiException;
+import com.tomato.framework.plugin.rmi.loadbalance.LoadBalance;
+import com.tomato.framework.plugin.rmi.loadbalance.RoundRobin;
 import com.tomato.framework.plugin.rmi.utils.ZKUtils;
 import java.rmi.Naming;
 import java.rmi.Remote;
@@ -35,6 +37,8 @@ public class ZKDiscovery implements Discovery {
     private final static int ZK_RETRIES = 3;
     
     private Map<String, Set<String>> services = Maps.newConcurrentMap();
+    
+    private LoadBalance loadBalance = new RoundRobin();
     
     public ZKDiscovery(String address) {
         this.address = address;
@@ -75,7 +79,11 @@ public class ZKDiscovery implements Discovery {
             }
             
         });
-        
+    }
+    
+    public ZKDiscovery(String address, LoadBalance loadBalance) {
+        this(address);
+        this.loadBalance = loadBalance;
     }
     
     private void init() {
@@ -121,7 +129,8 @@ public class ZKDiscovery implements Discovery {
             if (EmptyUtils.isEmpty(paths)) {
                 throw new RmiException("没有相关服务提供者【" + className + "】");
             }
-            return (T) Naming.lookup(paths.iterator().next().concat("/").concat(className));
+            return (T) Naming.lookup(
+                loadBalance.loadbalance(paths.stream().collect(Collectors.toList())).concat("/").concat(className));
         } catch (Exception e) {
             throw new RmiException(e);
         }
