@@ -2,6 +2,7 @@ package com.tomato.framework.plugin.mybatis;
 
 import com.tomato.framework.plugin.mybatis.sqlsession.SqlSessionFactory;
 import com.tomato.framework.plugin.mybatis.sqlsession.SqlSessionFactoryBuilder;
+import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -21,7 +22,8 @@ public class JDBC {
     private SqlSessionFactory sqlSessionFactory;
     
     @Before
-    public void init() {
+    public void init() throws IOException {
+//        InputStream in = this.getClass().getClassLoader().getResourceAsStream("application-qa.properties");
         InputStream in = this.getClass().getClassLoader().getResourceAsStream("mybatisConfig.xml");
         this.sqlSessionFactory = new SqlSessionFactoryBuilder().build(in);
     }

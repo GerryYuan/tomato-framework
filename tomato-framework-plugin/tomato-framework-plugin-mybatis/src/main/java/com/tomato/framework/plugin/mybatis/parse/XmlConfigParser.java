@@ -1,6 +1,8 @@
 package com.tomato.framework.plugin.mybatis.parse;
 
 import com.tomato.framework.plugin.mybatis.config.Configuration;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
@@ -47,7 +49,6 @@ public class XmlConfigParser {
             String value = e.attributeValue("value");
             properties.put(name, value);
         });
-    
         BasicDataSource dataSource = null;
         if (type.equals("DBCP")) {
             dataSource = new BasicDataSource();
@@ -55,9 +56,20 @@ public class XmlConfigParser {
             dataSource.setUrl(properties.getProperty("url"));
             dataSource.setUsername(properties.getProperty("username"));
             dataSource.setPassword(properties.getProperty("password"));
+            //解析完了set到configuration中
+            configuration.setDataSource(dataSource);
+        } else if (type.equals("HikariCP")) {
+            HikariConfig config = new HikariConfig();
+            config.setJdbcUrl(properties.getProperty("url"));
+            config.setUsername(properties.getProperty("username"));
+            config.setPassword(properties.getProperty("password"));
+            config.addDataSourceProperty("cachePrepStmts", "true");
+            config.addDataSourceProperty("prepStmtCacheSize", "250");
+            config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+            HikariDataSource ds = new HikariDataSource(config);
+            configuration.setDataSource(ds);
         }
-        //解析完了set到configuration中
-        configuration.setDataSource(dataSource);
+        
     }
     
 }
