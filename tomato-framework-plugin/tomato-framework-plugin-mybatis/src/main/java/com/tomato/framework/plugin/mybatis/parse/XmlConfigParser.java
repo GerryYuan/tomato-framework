@@ -3,10 +3,12 @@ package com.tomato.framework.plugin.mybatis.parse;
 import com.tomato.framework.plugin.mybatis.config.Configuration;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
 import org.apache.commons.dbcp.BasicDataSource;
+import org.dom4j.Document;
 import org.dom4j.Element;
 
 /**
@@ -24,6 +26,12 @@ public class XmlConfigParser {
     
     public void parser(Element root) {
         //开始解析environments
+        parseEnvironments(root);
+        //开始解析mappers
+        parseMappers(root);
+    }
+    
+    private void parseEnvironments(Element root) {
         Element envs = root.element("environments");
         String defaultId = envs.attributeValue("default");
         List<Element> env = envs.elements("environment");
@@ -34,6 +42,18 @@ public class XmlConfigParser {
             }
             // 如果和默认的环境ID匹配，才进行解析
             parseDataSource(e.element("dataSource"));
+        });
+    }
+    
+    private void parseMappers(Element root) {
+        Element mappers = root.element("mappers");
+        List<Element> mapper = mappers.elements("mapper");
+        mapper.forEach(e -> {
+            String resource = e.attributeValue("resource");
+            InputStream in = this.getClass().getClassLoader().getResourceAsStream(resource);
+            Document reader = Dom4jReader.reader(in);
+            XmlMapperParser xmlMapperParser = new XmlMapperParser(this.configuration);
+            xmlMapperParser.parser(reader.getRootElement());
         });
     }
     

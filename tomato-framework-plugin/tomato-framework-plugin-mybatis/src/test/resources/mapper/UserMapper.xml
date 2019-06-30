@@ -1,7 +1,7 @@
 <mapper namespace="com.tomato.framework.plugin.mybatis.UserDao">
   <!-- select标签，封装了SQL语句信息、入参类型、结果映射类型 -->
-  <select id="findUserById" parameterType="com.kkb.mybatis.po.User"
-    resultType="com.kkb.mybatis.po.User" statementType="prepared">
+  <select id="findUserById" parameterType="com.tomato.framework.plugin.mybatis.User"
+    resultType="com.tomato.framework.plugin.mybatis.User" statementType="prepared">
     SELECT * FROM user WHERE id = #{id}
   </select>
 </mapper>

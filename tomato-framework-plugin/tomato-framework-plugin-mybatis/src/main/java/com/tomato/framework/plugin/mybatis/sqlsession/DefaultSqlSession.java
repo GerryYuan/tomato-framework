@@ -22,7 +22,7 @@ public class DefaultSqlSession implements SqlSession {
     
     @Override
     public <T> T selectOne(String statementId, Object param) {
-        MappedStatement mappedStatement = configuration.getStatement().get(statementId);
+        MappedStatement mappedStatement = configuration.getMappedStatement(statementId);
         String sql = mappedStatement.getSql();
         //处理sql占位符
         SqlHandler sqlHandler = new ParamMappingSqlHandler();

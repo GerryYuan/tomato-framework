@@ -3,12 +3,10 @@ package com.tomato.framework.plugin.mybatis.parse;
 import com.tomato.framework.plugin.mybatis.config.Configuration;
 import com.tomato.framework.plugin.mybatis.exception.XmlMybatisParserException;
 import com.tomato.framework.plugin.mybatis.statement.MappedStatement;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import org.dom4j.Document;
 import org.dom4j.Element;
 
 /**
@@ -25,17 +23,6 @@ public class XmlMapperParser {
     }
     
     public void parser(Element root) {
-        Element mappers = root.element("mappers");
-        List<Element> mapper = mappers.elements("mapper");
-        mapper.forEach(e -> {
-            String resource = e.attributeValue("resource");
-            InputStream in = this.getClass().getClassLoader().getResourceAsStream(resource);
-            Document reader = Dom4jReader.reader(in);
-            parserMapper(reader.getRootElement());
-        });
-    }
-    
-    private void parserMapper(Element root) {
         String namespace = root.attributeValue("namespace");
         List<Element> select = root.elements("select");
         Map<String, MappedStatement> statementMap = new HashMap<>();
@@ -44,7 +31,7 @@ public class XmlMapperParser {
             String statementId = namespace.concat(".").concat(mappedStatement.getId());
             statementMap.put(statementId, mappedStatement);
         });
-        configuration.setStatement(statementMap);
+        configuration.addMappedStatement(statementMap);
     }
     
     private MappedStatement parserSelect(Element select) {

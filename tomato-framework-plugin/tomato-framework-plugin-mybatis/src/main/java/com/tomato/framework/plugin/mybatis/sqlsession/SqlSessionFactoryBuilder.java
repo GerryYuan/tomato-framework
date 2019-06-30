@@ -3,7 +3,6 @@ package com.tomato.framework.plugin.mybatis.sqlsession;
 import com.tomato.framework.plugin.mybatis.config.Configuration;
 import com.tomato.framework.plugin.mybatis.parse.Dom4jReader;
 import com.tomato.framework.plugin.mybatis.parse.XmlConfigParser;
-import com.tomato.framework.plugin.mybatis.parse.XmlMapperParser;
 import java.io.InputStream;
 import org.dom4j.Document;
 
@@ -26,9 +25,6 @@ public class SqlSessionFactoryBuilder {
         //根据document进行config解析
         XmlConfigParser xmlConfigParser = new XmlConfigParser(this.configuration);
         xmlConfigParser.parser(reader.getRootElement());
-        //根据document进行mapper解析
-        XmlMapperParser xmlMapperParser = new XmlMapperParser(this.configuration);
-        xmlMapperParser.parser(reader.getRootElement());
         return build();
     }
     
