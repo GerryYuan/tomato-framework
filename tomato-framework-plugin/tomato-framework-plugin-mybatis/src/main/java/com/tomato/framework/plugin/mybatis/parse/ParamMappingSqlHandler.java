@@ -2,6 +2,7 @@ package com.tomato.framework.plugin.mybatis.parse;
 
 import com.google.common.collect.Lists;
 import java.util.List;
+import lombok.Getter;
 
 /**
  * @author Created by gerry
@@ -10,6 +11,7 @@ import java.util.List;
  */
 public class ParamMappingSqlHandler implements SqlHandler {
     
+    @Getter
     private List<String> vars = Lists.newArrayList();
     
     @Override
@@ -17,4 +19,5 @@ public class ParamMappingSqlHandler implements SqlHandler {
         vars.add(content);
         return "?";
     }
+    
 }
