@@ -1,5 +1,6 @@
 package com.tomato.framework.plugin.mybatis.statement;
 
+import lombok.Builder;
 import lombok.Data;
 
 /**
@@ -8,6 +9,7 @@ import lombok.Data;
  * @date 2019-06-29-15:20
  */
 @Data
+@Builder
 public class MappedStatement {
     
     private String id;
