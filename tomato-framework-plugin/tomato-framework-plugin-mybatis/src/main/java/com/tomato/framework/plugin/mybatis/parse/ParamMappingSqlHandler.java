@@ -1,6 +1,6 @@
 package com.tomato.framework.plugin.mybatis.parse;
 
-import com.google.common.collect.Lists;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 
@@ -12,12 +12,18 @@ import lombok.Getter;
 public class ParamMappingSqlHandler implements SqlHandler {
     
     @Getter
-    private List<String> vars = Lists.newArrayList();
+    private List<ParamMapping> paramMappings = new ArrayList<>();
     
     @Override
     public String handleSql(String content) {
-        vars.add(content);
+        paramMappings.add(buildParamMapping(content));
         return "?";
+    }
+    
+    private ParamMapping buildParamMapping(String content) {
+        ParamMapping paramMapping = new ParamMapping();
+        paramMapping.setContent(content);
+        return paramMapping;
     }
     
 }

@@ -1,5 +1,6 @@
 package com.tomato.framework.plugin.mybatis.statement;
 
+import com.tomato.framework.plugin.mybatis.parse.BoundSql;
 import lombok.Builder;
 import lombok.Data;
 
@@ -14,7 +15,7 @@ public class MappedStatement {
     
     private String id;
     
-    private String sql;
+    private BoundSql boundSql;
     
     private String parameterType;
     

@@ -45,9 +45,10 @@ public class XmlMapperParser {
         }
         String parameterType = select.attributeValue("parameterType");
         String resultType = select.attributeValue("resultType");
-        String sql = select.getStringValue();
+        String sqlText = select.getTextTrim();
+        SqlSource sqlSource = new SqlSource(configuration, sqlText);
         return MappedStatement.builder().id(id).parameterType(parameterType)
-            .resultType(resultType).sql(sql).statementType(statementType).build();
+            .resultType(resultType).boundSql(sqlSource.getBoundSql()).statementType(statementType).build();
     }
     
 }
