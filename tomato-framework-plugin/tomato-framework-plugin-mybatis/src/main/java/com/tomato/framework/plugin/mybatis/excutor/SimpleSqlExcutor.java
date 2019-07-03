@@ -22,7 +22,7 @@ public class SimpleSqlExcutor implements SqlExcutor {
     
     @Override
     public <T> List<T> selectList(Object param) {
-        BoundSql boundSql = mappedStatement.getBoundSql();
+        BoundSql boundSql = mappedStatement.getSqlSource().getBoundSql(param);
         Statement statement = null;
         Class<?> paramterTypeClass = mappedStatement.getParamterTypeClass();
         try {

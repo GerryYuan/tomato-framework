@@ -7,14 +7,18 @@ import lombok.Setter;
 
 public class BoundSql {
     
-    public BoundSql(String sql, List<ParamMapping> paramMappings) {
-        this.sql = sql;
-        this.paramMappings = paramMappings;
-    }
-    
     @Getter
     @Setter
     private String sql;
+    
+    private Object paramObj;
+    
+    public BoundSql(String sql, Object paramObj,
+        List<ParamMapping> paramMappings) {
+        this.sql = sql;
+        this.paramObj = paramObj;
+        this.paramMappings = paramMappings;
+    }
     
     @Getter
     private List<ParamMapping> paramMappings = new ArrayList<>();

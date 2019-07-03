@@ -46,11 +46,12 @@ public class XmlMapperParser {
         String parameterType = select.attributeValue("parameterType");
         String resultType = select.attributeValue("resultType");
         String sqlText = select.getTextTrim();
-        SqlSource sqlSource = new SqlSource(configuration, sqlText);
+        //需要解析sql，然后判断是否是动态sql还是静态sql
+        SqlSource sqlSource = new StaticSqlSource(configuration, sqlText);
         try {
             Class<?> paramterTypeClass = Class.forName(parameterType);
             return MappedStatement.builder().id(id).parameterType(parameterType).paramterTypeClass(paramterTypeClass)
-                .resultType(resultType).boundSql(sqlSource.getBoundSql()).statementType(statementType).build();
+                .resultType(resultType).sqlSource(sqlSource).statementType(statementType).build();
         } catch (ClassNotFoundException e) {
             throw new XmlMybatisParserException("id -> " + id + "，parameterType error is -> " + e.getMessage());
         }
