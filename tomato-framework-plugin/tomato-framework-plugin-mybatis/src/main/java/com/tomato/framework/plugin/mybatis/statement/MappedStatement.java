@@ -19,6 +19,8 @@ public class MappedStatement {
     
     private String parameterType;
     
+    private Class<?> paramterTypeClass;
+    
     private String resultType;
     
     private String statementType;

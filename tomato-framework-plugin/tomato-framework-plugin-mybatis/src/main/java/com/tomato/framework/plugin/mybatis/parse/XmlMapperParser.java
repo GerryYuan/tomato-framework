@@ -47,8 +47,14 @@ public class XmlMapperParser {
         String resultType = select.attributeValue("resultType");
         String sqlText = select.getTextTrim();
         SqlSource sqlSource = new SqlSource(configuration, sqlText);
-        return MappedStatement.builder().id(id).parameterType(parameterType)
-            .resultType(resultType).boundSql(sqlSource.getBoundSql()).statementType(statementType).build();
+        try {
+            Class<?> paramterTypeClass = Class.forName(parameterType);
+            return MappedStatement.builder().id(id).parameterType(parameterType).paramterTypeClass(paramterTypeClass)
+                .resultType(resultType).boundSql(sqlSource.getBoundSql()).statementType(statementType).build();
+        } catch (ClassNotFoundException e) {
+            throw new XmlMybatisParserException("id -> " + id + "，parameterType error is -> " + e.getMessage());
+        }
+    
     }
     
 }

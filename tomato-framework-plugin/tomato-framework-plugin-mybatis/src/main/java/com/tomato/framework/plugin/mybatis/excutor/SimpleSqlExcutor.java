@@ -5,6 +5,7 @@ import com.tomato.framework.plugin.mybatis.parse.BoundSql;
 import com.tomato.framework.plugin.mybatis.statement.MappedStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.List;
 
 public class SimpleSqlExcutor implements SqlExcutor {
@@ -22,19 +23,29 @@ public class SimpleSqlExcutor implements SqlExcutor {
     @Override
     public <T> List<T> selectList(Object param) {
         BoundSql boundSql = mappedStatement.getBoundSql();
-        PreparedStatement preparedStatement = null;
+        Statement statement = null;
+        Class<?> paramterTypeClass = mappedStatement.getParamterTypeClass();
         try {
-            preparedStatement = configuration.getDataSource().getConnection()
-                .prepareStatement(boundSql.getSql());
-            for (int i = 1; i <= boundSql.getParamMappings().size(); i++) {
-                if (param instanceof Integer) {
-                    preparedStatement.setInt(i, (Integer) param);
+            if ("prepared".equals(mappedStatement.getStatementType())) {
+                statement = configuration.getDataSource().getConnection()
+                    .prepareStatement(boundSql.getSql());
+                PreparedStatement preparedStatement = (PreparedStatement) statement;
+                if (paramterTypeClass == Integer.class) {
+                    preparedStatement.setInt(1, (Integer) param);
+                } else {
+                    for (int i = 1; i <= boundSql.getParamMappings().size(); i++) {
+                        if (param instanceof Integer) {
+                            preparedStatement.setInt(i, (Integer) param);
+                        }
+                    }
                 }
-            }
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                System.out.println(resultSet.getString(1));
-                System.out.println(resultSet.getString(2));
+                ResultSet resultSet = preparedStatement.executeQuery();
+                while (resultSet.next()) {
+                    System.out.println(resultSet.getString(1));
+                    System.out.println(resultSet.getString(2));
+                }
+            } else {
+                //其他statement
             }
         } catch (Exception e) {
             e.printStackTrace();
