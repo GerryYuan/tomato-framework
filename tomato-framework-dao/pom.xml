@@ -16,7 +16,6 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<mango.version>1.6.0</mango.version>
 		<tomato-framework.version>1.0.1-SNAPSHOT</tomato-framework.version>
 	</properties>
 
