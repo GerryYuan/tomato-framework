@@ -24,5 +24,6 @@
 		<module>tomato-framework-plugin-rpc</module>
 		<module>tomato-framework-plugin-websocket</module>
         <module>tomato-framework-plugin-mqtt</module>
+      <module>tomato-framework-plugin-mybatis</module>
     </modules>
 </project>
