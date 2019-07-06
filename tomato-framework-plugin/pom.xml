@@ -25,5 +25,6 @@
 		<module>tomato-framework-plugin-websocket</module>
         <module>tomato-framework-plugin-mqtt</module>
       <module>tomato-framework-plugin-mybatis</module>
+      <module>tomato-framework-plugin-ioc</module>
     </modules>
 </project>
