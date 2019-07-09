@@ -22,21 +22,12 @@ public class XmlBeanDefinitionParser {
     
     private void parseBeanDefinitions(Element element) {
         List<Element> elements = element.elements();
+        DocumentbeanDefinitionParser documentbeanDefinitionParser = new DocumentbeanDefinitionParser();
         elements.forEach(e -> {
             //判断是不是bean标签，如果是，则走bean标签，否则走其他标签
-            parseBeanDefinition(e);
+            BeanDefinitionHolder holder = documentbeanDefinitionParser.parseBeanDefinition(e);
+            beanFactory.addBeanDefinition(holder.getBeanName(), holder.getBeanDefinition());
         });
-    }
-    
-    private void parseBeanDefinition(Element element) {
-        String id = element.attributeValue("id");
-        String clazz = element.attributeValue("class");
-        try {
-            Class<?> classType = Class.forName(clazz);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        
     }
     
     private void parseOther(Element element) {
