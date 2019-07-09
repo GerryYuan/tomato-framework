@@ -1,0 +1,17 @@
+<beans>
+  <bean id="student" class="com.tomato.framework.plugin.ioc.test.User">
+    <!-- String类型 -->
+    <property name="name" value="zengkeyan"></property>
+    <!-- 引用类型 -->
+    <property name="course" ref="course"></property>
+  </bean>
+
+  <!-- 该类有一个初始化方法 -->
+  <bean id="course" class="com.tomato.framework.plugin.ioc.test.Course"
+    init-method="init">
+    <!-- String类型 -->
+    <property name="name" value="spring"></property>
+    <!-- Integer类型 -->
+    <property name="age" value="18"></property>
+  </bean>
+</beans>

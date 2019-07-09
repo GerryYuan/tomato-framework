@@ -16,7 +16,7 @@ public class BeanFactoryTest {
         //读取配置文件
         String location = "classpath:beans.xml";
         Resource resource = new ClassPathResource(location);
-        BeanFactory beanFactory = new DefaultListableBeanFactory();
+        BeanFactory beanFactory = new DefaultListableBeanFactory(resource);
         User user = beanFactory.getBean("user");
         System.out.println(user);
     }

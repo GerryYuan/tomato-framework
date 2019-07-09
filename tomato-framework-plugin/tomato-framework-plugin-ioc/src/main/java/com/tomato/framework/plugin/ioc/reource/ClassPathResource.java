@@ -17,6 +17,6 @@ public class ClassPathResource implements Resource {
     
     @Override
     public InputStream getInputStream() {
-        return this.getClass().getClassLoader().getResourceAsStream(location);
+        return this.getClass().getClassLoader().getResourceAsStream(location.replace("classpath:", ""));
     }
 }

@@ -1,5 +1,7 @@
 package com.tomato.framework.plugin.ioc.factory;
 
+import com.tomato.framework.plugin.ioc.reource.Resource;
+
 /**
  * @author Created by gerry
  * @version 1.0
@@ -7,4 +9,7 @@ package com.tomato.framework.plugin.ioc.factory;
  */
 public class XmlBeanFactory extends DefaultListableBeanFactory{
     
+    public XmlBeanFactory(Resource resource) {
+        super(resource);
+    }
 }
