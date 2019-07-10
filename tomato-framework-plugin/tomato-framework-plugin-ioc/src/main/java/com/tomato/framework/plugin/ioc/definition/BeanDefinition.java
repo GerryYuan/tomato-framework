@@ -1,6 +1,8 @@
 package com.tomato.framework.plugin.ioc.definition;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -21,4 +23,10 @@ public class BeanDefinition {
     
     private List<PropertyValue> propertyValues;
     
+    public void addPropertyValue(PropertyValue propertyValue) {
+        if (Objects.isNull(propertyValues) || propertyValues.size() == 0) {
+            propertyValues = new ArrayList<>();
+        }
+        propertyValues.add(propertyValue);
+    }
 }

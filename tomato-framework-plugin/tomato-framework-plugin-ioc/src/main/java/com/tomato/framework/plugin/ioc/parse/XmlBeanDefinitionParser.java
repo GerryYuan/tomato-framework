@@ -22,7 +22,7 @@ public class XmlBeanDefinitionParser {
     
     private void parseBeanDefinitions(Element element) {
         List<Element> elements = element.elements();
-        DocumentbeanDefinitionParser documentbeanDefinitionParser = new DocumentbeanDefinitionParser();
+        DocumentBeanDefinitionParser documentbeanDefinitionParser = new DocumentBeanDefinitionParser();
         elements.forEach(e -> {
             //判断是不是bean标签，如果是，则走bean标签，否则走其他标签
             BeanDefinitionHolder holder = documentbeanDefinitionParser.parseBeanDefinition(e);
