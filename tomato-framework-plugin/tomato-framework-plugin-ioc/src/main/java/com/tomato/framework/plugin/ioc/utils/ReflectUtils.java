@@ -6,7 +6,7 @@ import java.lang.reflect.Method;
 
 public class ReflectUtils {
     
-    public static Object createObject(String beanClassName, Object... args) {
+    public static Object newInstance(String beanClassName, Object... args) {
         try {
             Class<?> clazz = Class.forName(beanClassName);
             Constructor<?> constructor = clazz.getConstructor();

@@ -46,7 +46,7 @@ public class DocumentBeanDefinitionParser {
         if (Objects.nonNull(value) && Objects.nonNull(ref)) {
             return;
         }
-        PropertyValueBuilder propertyValueBuilder = PropertyValue.builder().name(name);
+        PropertyValueBuilder builder = PropertyValue.builder().name(name);
         //如果value值不是空，则认为是除了引用类型的属性值之外的类型
         //否则，如果ref不是空，则认为是引用类型
         if (Objects.nonNull(value)) {
@@ -57,11 +57,11 @@ public class DocumentBeanDefinitionParser {
             if (Objects.isNull(converter)) {
                 return;
             }
-            propertyValueBuilder.value(converter.convert(value));
+            builder.value(converter.convert(value));
         } else if (Objects.nonNull(ref)) {
-            propertyValueBuilder.value(new ReferenceTypeConverter(ref));
+            builder.value(new ReferenceTypeConverter(ref));
         }
-        beanDefinition.addPropertyValue(propertyValueBuilder.build());
+        beanDefinition.addPropertyValue(builder.build());
     }
     
 }

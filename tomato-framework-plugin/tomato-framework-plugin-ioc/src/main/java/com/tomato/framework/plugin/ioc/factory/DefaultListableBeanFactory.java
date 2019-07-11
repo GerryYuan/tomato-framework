@@ -48,7 +48,7 @@ public class DefaultListableBeanFactory extends AbstractBeanFactory {
         if (Objects.isNull(beanDefinition)) {
             throw new BeanNotFoundException("bean " + name + " is not found");
         }
-        Object instance = ReflectUtils.createObject(beanDefinition.getClazz());
+        Object instance = ReflectUtils.newInstance(beanDefinition.getClazz());
         this.setProperty(instance, beanDefinition);
         return (T) instance;
     }
@@ -61,7 +61,7 @@ public class DefaultListableBeanFactory extends AbstractBeanFactory {
             TypedValue typedValue = propertyValue.getValue();
             //根据obj value的类型处理不同的逻辑
             if (typedValue.isRef()) {
-                ReflectUtils.setProperty(bean, name, getBean(typedValue.getValue()));
+                ReflectUtils.setProperty(bean, name, this.getBean(typedValue.getValue()));
             } else {
                 ReflectUtils.setProperty(bean, name, typedValue.getValue());
             }
