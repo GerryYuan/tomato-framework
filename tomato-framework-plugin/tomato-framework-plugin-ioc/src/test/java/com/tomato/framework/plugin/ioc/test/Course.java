@@ -7,6 +7,9 @@ public class Course {
     
     private String name;
     
-    private int age;
+    private Integer age;
     
+    public void init() {
+        System.out.println("初始化Course.init方法");
+    }
 }

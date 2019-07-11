@@ -18,12 +18,12 @@ public class ReflectUtils {
         return null;
     }
     
-    public static void setProperty(Object beanInstance, String name, Object valueToUse) {
+    public static void setProperty(Object beanInstance, String name, Object value) {
         try {
             Class<?> clazz = beanInstance.getClass();
             Field field = clazz.getDeclaredField(name);
             field.setAccessible(true);
-            field.set(beanInstance, valueToUse);
+            field.set(beanInstance, value);
         } catch (Exception e) {
             e.printStackTrace();
         }

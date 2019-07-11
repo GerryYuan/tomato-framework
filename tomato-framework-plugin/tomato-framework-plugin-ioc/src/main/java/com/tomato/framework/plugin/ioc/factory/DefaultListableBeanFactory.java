@@ -2,6 +2,7 @@ package com.tomato.framework.plugin.ioc.factory;
 
 import com.tomato.framework.plugin.ioc.definition.BeanDefinition;
 import com.tomato.framework.plugin.ioc.exception.BeanNotFoundException;
+import com.tomato.framework.plugin.ioc.parse.TypedValue;
 import com.tomato.framework.plugin.ioc.parse.XmlBeanDefinitionParser;
 import com.tomato.framework.plugin.ioc.reource.Resource;
 import com.tomato.framework.plugin.ioc.utils.ReflectUtils;
@@ -49,7 +50,7 @@ public class DefaultListableBeanFactory extends AbstractBeanFactory {
         }
         Object instance = ReflectUtils.createObject(beanDefinition.getClazz());
         this.setProperty(instance, beanDefinition);
-        return null;
+        return (T) instance;
     }
     
     @Override
@@ -57,8 +58,13 @@ public class DefaultListableBeanFactory extends AbstractBeanFactory {
         beanDefinition.getPropertyValues().forEach(propertyValue -> {
             //属性名称，然后调用bean对象的属性的set方法，值为value；
             String name = propertyValue.getName();
-            Object value = propertyValue.getValue();
+            TypedValue typedValue = propertyValue.getValue();
             //根据obj value的类型处理不同的逻辑
+            if (typedValue.isRef()) {
+                ReflectUtils.setProperty(bean, name, getBean(typedValue.getValue()));
+            } else {
+                ReflectUtils.setProperty(bean, name, typedValue.getValue());
+            }
         });
     }
 }
