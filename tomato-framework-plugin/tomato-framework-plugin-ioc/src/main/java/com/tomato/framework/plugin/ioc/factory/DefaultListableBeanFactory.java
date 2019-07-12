@@ -20,7 +20,7 @@ public class DefaultListableBeanFactory extends AbstractBeanFactory {
     
     private Map<String, BeanDefinition> beanDefinitions = new ConcurrentHashMap<>();
     
-    private Map<String, Object> beans = new ConcurrentHashMap<>();
+    private SingletonBeanFactory singletonBeanFactory = new DefaultSingletonBeanRegistry();
     
     public DefaultListableBeanFactory(Resource resource) {
         //1.读取配置文件获取Bean
@@ -40,7 +40,7 @@ public class DefaultListableBeanFactory extends AbstractBeanFactory {
     //5.把Bean实例放入到集合中
     @Override
     public <T> T getBean(String name) {
-        Object bean = beans.get(name);
+        Object bean = singletonBeanFactory.getBean(name);
         if (Objects.nonNull(bean)) {
             return (T) bean;
         }
@@ -50,6 +50,7 @@ public class DefaultListableBeanFactory extends AbstractBeanFactory {
         }
         Object instance = ReflectUtils.newInstance(beanDefinition.getClazz());
         this.setProperty(instance, beanDefinition);
+        singletonBeanFactory.addSingleton(name, instance);
         return (T) instance;
     }
     
