@@ -9,6 +9,8 @@ public class Course {
     
     private Integer age;
     
+    private User user;
+    
     public void init() {
         System.out.println("初始化Course.init方法");
     }

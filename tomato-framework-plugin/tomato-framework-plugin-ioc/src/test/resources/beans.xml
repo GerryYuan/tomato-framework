@@ -13,5 +13,6 @@
     <property name="name" value="spring"></property>
     <!-- Integer类型 -->
     <property name="age" value="18"></property>
+    <property name="user" ref="student"></property>
   </bean>
 </beans>
