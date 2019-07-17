@@ -51,7 +51,7 @@ public class DefaultListableBeanFactory extends AbstractBeanFactory {
          * b)、然后获取实例化bean，给bean进行属性赋值，依赖注入（循环依赖问题，通过三级缓存解决）
          * c)、初始化bean实例
          */
-        //4.根据BeanDefinition构造Bean实例
+        //4.根据BeanDefinition构造Bean实例，并且把bean放入三级缓存中
         Object instance = doCreateBean(beanDefinition.getBeanName(), beanDefinition.getClazz());
         //设置属性值，进行属性依赖注入
         this.setProperty(instance, beanDefinition);
