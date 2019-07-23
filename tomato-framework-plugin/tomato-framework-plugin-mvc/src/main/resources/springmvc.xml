@@ -1,20 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans>
   <!-- 配置handler -->
-  <!-- <bean name="/userQuery2" class="com.kkb.springmvc.handler.UserQueryHandler"></bean> -->
 
   <!-- 配置处理器映射器 -->
   <bean class="com.tomato.framework.plugin.mvc.handler.BeanNameUrlHandlerMapping" init-method="init"/>
   <bean
-    class="com.kkb.springmvc.handlermapping.SimpleHandlerMapping"></bean>
-  <bean
-    class="com.kkb.springmvc.handlermapping.RequestMappingHandlerMapping"
-    init-method="initMethod"></bean>
+    class="com.tomato.framework.plugin.mvc.handler.RequestMappingHandlerMapping"
+    init-method="init"></bean>
   <!-- 配置处理器适配器 -->
   <bean
-    class="com.kkb.springmvc.handleradapter.RequestMappingHandlerAdapter"></bean>
-  <bean
-    class="com.kkb.springmvc.handleradapter.HttpRequestHandlerAdapter"></bean>
+    class="com.tomato.framework.plugin.mvc.handler.RequestMappingHandlerAdapter"></bean>
 
-  <component-scan package="com.kkb.springmvc.handler"/>
+  <component-scan package="com.xxx.springmvc.handler"/>
 </beans>
