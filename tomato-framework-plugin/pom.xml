@@ -26,5 +26,6 @@
         <module>tomato-framework-plugin-mqtt</module>
       <module>tomato-framework-plugin-mybatis</module>
       <module>tomato-framework-plugin-ioc</module>
+      <module>tomato-framework-plugin-mvc</module>
     </modules>
 </project>
