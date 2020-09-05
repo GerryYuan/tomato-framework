@@ -31,13 +31,11 @@ public class DefaultListableBeanFactory extends AbstractBeanFactory {
         //转换BeanDifinition到Bean实例
     }
     
+    //3.把BeanDefinition放入集合中
     public void addBeanDefinition(String beanName, BeanDefinition beanDefinition) {
         beanDefinitions.put(beanName, beanDefinition);
     }
     
-    //3.把BeanDefinition放入集合中
-    //4.根据BeanDefinition构造Bean实例
-    //5.把Bean实例放入到集合中
     @Override
     public <T> T getBean(String name) {
         Object bean = singletonBeanFactory.getBean(name);
@@ -48,10 +46,35 @@ public class DefaultListableBeanFactory extends AbstractBeanFactory {
         if (Objects.isNull(beanDefinition)) {
             throw new BeanNotFoundException("bean " + name + " is not found");
         }
-        Object instance = ReflectUtils.newInstance(beanDefinition.getClazz());
+        /**
+         * a)、构建BeanFactory工厂-获取beanDefinition
+         * b)、然后获取实例化bean，给bean进行属性赋值，依赖注入（循环依赖问题，通过三级缓存解决）
+         * c)、初始化bean实例
+         */
+        //4.根据BeanDefinition构造Bean实例，并且把bean放入三级缓存中
+        Object instance = doCreateBean(beanDefinition.getBeanName(), beanDefinition.getClazz());
+        //设置属性值，进行属性依赖注入
         this.setProperty(instance, beanDefinition);
+        //初始化bean对象
+        initMethods(instance, beanDefinition.getInitMethod());
+        //5.把Bean实例放入到集合中
         singletonBeanFactory.addSingleton(name, instance);
         return (T) instance;
+    }
+    
+    private Object doCreateBean(String beanName, String clazz) {
+        Object bean = ReflectUtils.newInstance(clazz);
+        final Object finalBean = bean;
+        singletonBeanFactory.addSingletonFactory(beanName, () -> finalBean);
+        return finalBean;
+    }
+    
+    private void initMethods(Object instance, String methodName) {
+        if (instance instanceof InitializingBean) {
+            ((InitializingBean) instance).afterPropertiesSet();
+        } else {
+            ReflectUtils.invokeMethod(instance, methodName);
+        }
     }
     
     @Override
